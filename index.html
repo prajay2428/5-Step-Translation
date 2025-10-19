@@ -1729,8 +1729,8 @@ function handleClear(step) {
     if (box2) box2.value = "";
   } else if (step === 5) {
     // Logic for Step 5
-    const box1 = document.getElementById(`input10_1`);
-    const box2 = document.getElementById(`input10_2`);
+    const box1 = document.getElementById(`input5_1`);
+    const box2 = document.getElementById(`input5_2`);
     if (box1) box1.innerHTML = "";
     if (box2) box2.innerHTML = "";
   } else {
@@ -1744,16 +1744,16 @@ function handleClear(step) {
 function clearAllInputs() {
   // Loop through all 10 steps
   for (let i = 1; i <= 5; i++) {
-    if (i === 9) {
+    if (i === 4) {
       // Special logic for Step 9 (div + textarea)
-      const box1 = document.getElementById(`input9_1`);
-      const box2 = document.getElementById(`input9_2`);
+      const box1 = document.getElementById(`input4_1`);
+      const box2 = document.getElementById(`input4_2`);
       if (box1) box1.innerHTML = "";
       if (box2) box2.value = "";
     } else if (i === 5) {
       // Special logic for Step 10 (div + div)
-      const box1 = document.getElementById(`input10_1`);
-      const box2 = document.getElementById(`input10_2`);
+      const box1 = document.getElementById(`input5_1`);
+      const box2 = document.getElementById(`input5_2`);
       if (box1) box1.innerHTML = "";
       if (box2) box2.innerHTML = "";
     } else {
@@ -1809,44 +1809,15 @@ function handleCopy(step) {
       const inputBox1 = document.getElementById(`input${step}_1`); // The div
       const inputBox2 = document.getElementById(`input${step}_2`); // The textarea
       const text1 = inputBox1 ? inputBox1.innerText.trim() : ""; // Use .innerText for the div
-      const text2 = inputBox2 ? inputBox2.value.trim() : "";   // Use .value for the textarea
+      const text2 = inputBox2 ? inputBox2.innerText.trim() : "";   // Use .value for the textarea
       finalText =
         getPrompt(step) +
         "\n\nEnglish Script:\n" +
         text1 +
         "\n\nTagged Telugu Script:\n" +
         text2;
-    } else if (step === 6) {
-      // Logic for Step 6
-      const inputBox = document.getElementById(`input${step}`);
-      const userInput = inputBox ? inputBox.value.trim() : "";
-      finalText =
-        getPrompt(step) +
-        "\n\nGemini Translation:\n" +
-        Gemini_Translation +
-        "\n\nClaude Translation:\n" +
-        userInput;
-    } else if (step === 7) {
-      // Logic for Step 7
-      const inputBox = document.getElementById(`input${step}`);
-      const userInput = inputBox ? inputBox.value.trim() : "";
-      finalText =
-        getPrompt(step) +
-        "\n\nEnglish Script:\n" +
-        Punctuated_Transcript +
-        "\n\nScript to be optimized:\n" +
-        userInput;
-    } else if (step === 8) {
-      // Logic for Step 8
-      const inputBox = document.getElementById(`input${step}`);
-      const userInput = inputBox ? inputBox.value.trim() : "";
-      finalText =
-        getPrompt(step) +
-        "\n\nEnglish Script:\n" +
-        Punctuated_Transcript +
-        "\n\nTelugu Script:\n" +
-        userInput;
-    } else {
+    } 
+     else {
       // Standard handling for all other steps
       const inputBox = document.getElementById(`input${step}`);
       const userInput = inputBox ? inputBox.value.trim() : "";
@@ -1857,8 +1828,7 @@ function handleCopy(step) {
       showMessage("📋 Prompt copied from Step " + step);
     });
 
-    if (step === 4) Punctuated_Transcript = document.getElementById("input4").value.trim();
-    if (step === 5) Gemini_Translation = document.getElementById("input5").value.trim();
+    
   }
 
   function showMessage(msg) {
