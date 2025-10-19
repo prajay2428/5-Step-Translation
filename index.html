@@ -1,0 +1,2474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>5 Step Translation</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      padding: 20px;
+      background: #faf9f7;
+      min-height: 100vh;
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      background: #ffffff;
+      border-radius: 20px;
+      border: 1px solid #e8e5e0;
+      box-shadow: 0 10px 40px rgba(139, 112, 87, 0.08);
+      padding: 40px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #8b7057;
+      margin-bottom: 10px;
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #a0916d;
+      margin-bottom: 30px;
+      font-size: 1.1rem;
+      font-weight: 400;
+    }
+
+    .clear-all-container {
+      text-align: center;
+      margin-bottom: 35px;
+      padding-bottom: 25px;
+      border-bottom: 1px solid #e8e5e0;
+    }
+
+    .clear-all-btn {
+      background: #f7f5f3;
+      color: #8b7057;
+      border: 1px solid #d4c4a8;
+      padding: 12px 24px;
+      font-size: 1rem;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-weight: 600;
+    }
+
+    .clear-all-btn:hover {
+      background: #f0ebe4;
+      border-color: #8b7057;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(139, 112, 87, 0.1);
+    }
+
+    textarea {
+      width: 100%;
+      height: 160px;
+      font-size: 14px;
+      padding: 16px;
+      white-space: pre-wrap;
+      resize: vertical;
+      margin: 12px 0;
+      border: 1px solid #e0d5c7;
+      border-radius: 12px;
+      font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', monospace;
+      background: #fefdfb;
+      color: #5d5043;
+      transition: all 0.2s ease;
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: #c4a484;
+      box-shadow: 0 0 0 3px rgba(196, 164, 132, 0.1);
+      background: #ffffff;
+    }
+
+    textarea::placeholder {
+      color: #b8a990;
+    }
+    .editable {
+  min-height: 160px;
+  border: 1px solid #e0d5c7;
+  border-radius: 12px;
+  padding: 16px;
+  font-family: 'SF Mono', Monaco, monospace;
+  background: #fefdfb;
+  white-space: pre-wrap;
+  overflow-y: auto;
+}
+
+/* Placeholder imitation */
+.editable:empty:before {
+  content: attr(data-placeholder);
+  color: #aaa;
+}
+
+
+    button {
+      padding: 10px 18px;
+      margin-right: 10px;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      border: 1px solid #e0d5c7;
+      border-radius: 10px;
+      transition: all 0.2s ease;
+      font-weight: 500;
+      background: #fefdfb;
+      color: #8b7057;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      background: #f7f5f3;
+      border-color: #c4a484;
+      box-shadow: 0 3px 10px rgba(139, 112, 87, 0.1);
+    }
+
+    .paste-btn {
+      border-color: #c4a484;
+      color: #8b7057;
+      background: #f9f7f4;
+    }
+
+    .paste-btn:hover {
+      background: #f5f1ed;
+      border-color: #a08967;
+    }
+
+    .copy-btn {
+      border-color: #b8a990;
+      color: #8b7057;
+      background: #f7f5f3;
+    }
+
+    .copy-btn:hover {
+      background: #f2ede6;
+      border-color: #9d8670;
+    }
+
+    .clear-btn {
+      border-color: #d4c4a8;
+      color: #a0916d;
+      background: #faf9f7;
+    }
+
+    .clear-btn:hover {
+      background: #f5f2ee;
+      border-color: #b8a990;
+    }
+
+    .followup-btn {
+      border-color: #a08967;
+      color: #6b5b47;
+      background: #f9f7f4;
+    }
+
+    .followup-btn:hover {
+      background: #f0ebe4;
+      border-color: #8b7057;
+    }
+
+    .step {
+      background: #ffffff;
+      padding: 28px;
+      margin-bottom: 24px;
+      border-radius: 16px;
+      border: 1px solid #f0ebe4;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 12px rgba(139, 112, 87, 0.04);
+    }
+
+    .step:hover {
+      border-color: #e0d5c7;
+      background: #fefdfb;
+      box-shadow: 0 4px 20px rgba(139, 112, 87, 0.08);
+    }
+
+    .step h3 {
+      margin: 0 0 18px 0;
+      color: #5d5043;
+      font-size: 1.3rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .step-number {
+      background: #8b7057;
+      color: #ffffff;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .ai-name {
+      background: #f7f5f3;
+      color: #8b7057;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      margin-left: auto;
+      border: 1px solid #e8e5e0;
+    }
+
+    .step-description {
+      background: #f9f7f4;
+      color: #6b5b47;
+      font-size: 0.95rem;
+      margin-bottom: 14px;
+      padding: 16px 18px;
+      border-radius: 10px;
+      border-left: 3px solid #c4a484;
+    }
+
+    .step-result {
+      background: #f5f2ee;
+      color: #7a6b56;
+      font-size: 0.95rem;
+      margin-bottom: 16px;
+      padding: 16px 18px;
+      border-radius: 10px;
+      border-left: 3px solid #a08967;
+    }
+
+    .button-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 15px;
+    }
+
+    .convert-btn {
+  border-color: #b8a990;
+  color: #8b7057;
+  background: #f7f5f3;
+}
+.convert-btn:hover {
+  background: #f2ede6;
+  border-color: #9d8670;
+}
+
+
+    /* ======= New Part Section Styling ======= */
+    .part-section {
+      padding: 25px;
+      border-radius: 16px;
+      margin-bottom: 40px;
+    }
+
+    .part-section h3 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 25px;
+      text-align: center;
+      border-bottom: 2px solid rgba(0,0,0,0.1);
+      padding-bottom: 10px;
+    }
+
+    .part1 { background: #f0f7ff; border-left: 5px solid #4a90e2; }
+    .part1 h3 { color: #4a90e2; }
+
+    .part2 { background: #f4fff7; border-left: 5px solid #41b883; }
+    .part2 h3 { color: #41b883; }
+
+    .part3 { background: #fff9f3; border-left: 5px solid #f5a623; }
+    .part3 h3 { color: #f5a623; }
+
+    .part4 { background: #f9f3ff; border-left: 5px solid #9b59b6; }
+    .part4 h3 { color: #9b59b6; }
+
+
+    /* ======================================== */
+
+    #message {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      background: #ffffff;
+      color: #5d5043;
+      padding: 14px 20px;
+      border-radius: 12px;
+      font-weight: 500;
+      border: 1px solid #e0d5c7;
+      box-shadow: 0 6px 20px rgba(139, 112, 87, 0.15);
+      transform: translateX(400px);
+      transition: transform 0.3s ease;
+      z-index: 1000;
+      font-size: 0.9rem;
+    }
+
+    #message.show {
+      transform: translateX(0);
+    }
+
+    hr {
+      border: none;
+      height: 1px;
+      background: #e8e5e0;
+      margin: 30px 0;
+      border-radius: 1px;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 15px;
+      }
+
+      .container {
+        padding: 25px;
+      }
+
+      h2 {
+        font-size: 1.8rem;
+      }
+
+      .step {
+        padding: 20px;
+      }
+
+      .button-group {
+        flex-direction: column;
+      }
+
+      button {
+        margin-right: 0;
+        width: 100%;
+      }
+    }
+
+    script[type="text/plain"] {
+      display: none;
+    }
+
+  /* ======= New Highlighter Tool Styling (Updated) ======= */
+.highlight-tool-container { /* Renamed for clarity */
+  /* This class will now be a part-section */
+}
+
+/* New styling for the blue-themed Part section */
+.part5 { background: #f0f7ff; border-left: 5px solid #4a90e2; }
+.part5 h3 { color: #4a90e2; }
+
+/* style for highlighting color */
+
+.teal-highlight {
+  background-color: #9bf8ec; /* Your chosen vibrant teal color */
+  border-radius: 4px;
+  padding: 1px 4px;
+}
+
+
+.green-highlight {
+  background-color: #05fd05; /* A soft, clear green */
+  border-radius: 4px;
+  padding: 1px 4px;
+}
+
+.yellow-highlight {
+  background-color: #fbfb00; /* A soft, pleasant yellow */
+  border-radius: 4px;
+  padding: 1px 4px;
+}
+
+/* ======= Scroll to Top Button Styling (Updated) ======= */
+/* ======= Scroll to Top Button Styling (Corrected) ======= */
+#scrollToTopBtn {
+  /* Start with the button being invisible but still taking up space */
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none; /* Can't be clicked when hidden */
+
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 999;
+  border: none;
+  outline: none;
+  background-color: #8b7057;
+  color: white;
+  cursor: pointer;
+  
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  
+  /* This is the key for centering and will no longer be overridden */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow: 0 5px 15px rgba(139, 112, 87, 0.3);
+  transition: all 0.3s ease;
+}
+
+/* This new class will be toggled by JavaScript to show the button */
+#scrollToTopBtn.visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+#scrollToTopBtn:hover {
+  background-color: #5d5043;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(139, 112, 87, 0.4);
+}
+
+#scrollToTopBtn svg {
+  width: 24px;
+  height: 24px;
+}
+/* ========================================================= */
+/* =========================================== */
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>5 Step Translation Workflow</h2>
+    <p class="subtitle">Multi-AI translation pipeline with 5 specialized steps</p>
+
+    <div class="clear-all-container">
+      <button class="clear-all-btn" onclick="clearAllInputs()">🗑️ Clear All Input Boxes</button>
+    </div>
+
+    <hr>
+
+    <div id="stepsContainer"></div>
+
+    <div id="message"></div>
+  </div>
+
+  <!-- Prompts -->
+  <!-- (keep your existing prompt scripts unchanged) -->
+  <script type="text/plain" id="prompt1">Transcription with Segmentation
+
+    Please transcribe the attached audio.
+    Now please follow the below approach.
+    The talk is made up of blocks of points.
+    Each point is made up of blocks of thoughts.
+    Each thought is made up of blocks of information.
+    
+    Now as you are transcribing,
+    Point 1: Marking the Pauses with … or ,
+    When  a sentence is made of blocks of information, if there is significant pause (more than 600 milliseconds) in speech add … to indicate that pause in speech.
+    Example: There is a beautiful ... incident that occurred ... around Ashtavakra.
+    
+    When  a sentence is made of blocks of information, if there is a pause that is not significant (less than 600 milliseconds) in speech add , to indicate that non-significant pause in speech.
+    Example: Up to four days, or to be safe up to five days, one can wait. 
+    
+    Point 2:
+    If the pause is not significant (less than 600 milliseconds), but the information block is an additional information to the main idea, in such cases add a - infront of that block of information (and at the end if there is another block after this block - Which is a part of the main idea and which completes the main idea)
+    Example 1:
+    No, but we have only two - one we are wearing, one is there
+    Example :2
+    Because you don't know how to handle your brains - because it's bothering you so much - you want to get smashed out on the weekend.
+    
+    Point 3:
+    After a thought is finished, an extension thought which is also a complete thought by itself - but is an extended thought to this one, in such cases place; to indicate that these are two standalone thoughts by themselves, but the second one is coming as an extension of the first one.
+    Example 1:
+    If God is what you want to meet, you must go to heaven; no, you're not anymore interested in God ... you are interested in the pleasures of heaven being imported here, isn't it?
+    
+    Example 2:
+     You're not willing to go there anymore; you want to be here, and have some bigger experience
+    
+    Point 4:
+    Within an idea, if blocks of thought are there but there is no pause between them, nor they are totally secondary or additional information - in such cases, when multiple information blocks are there that form the main thought and there is no pause between them, then use a , between them.
+    
+    Example1:
+    but how long it works, what it does to you later, is another question.
+    Example 2:
+    you just have to live the program - in your home, in your office, in your workplace, wherever you are. 
+    Point 5
+    Now one more detail, one aspect that marks the boundaries of meaningful segments is pause. If there is a pause of around half a second, we can consider that as the boundary of a segment and add ... there - if that pause happens to be in between a sentence.
+    
+    Now there is another kind of boundary that can be identified by the falling in pitch - Here there is no gap as such, but the falling of pitch indicates the boundary of a thought or a segment. At such boundaries use , instead of ... to mark such boundaries in the transcription
+    
+    
+    Example 1:
+    It is because of cosmic will, we have taken on this form.
+    Example 2:
+    because gravity is working, I am enjoying sitting here
+    Example 3:
+    If the alarm rings also, you still need willpower to get out of your bed.
+    
+    Point 6:
+    When ever sadhguru states an affect and then explains the reason behind it, differentiate the statement and the reason with a , between them.
+    Example 1:
+    It only acts that way, because the very framework of life is based on the cosmic will.
+    Example 2:
+    Because gravity is working, I am enjoying sitting here.
+    Example 3:
+    because, your will is generally empowered by a thought
+    Point 7:
+    Whenever sadhguru stresses on a word and then completes the sentence, place a - there.
+    Example 1:
+    We made ‘profit’ - by taking that risk.
+    
+    Point 8:
+    Add Quotes while he is quoting someone's words.
+
+    Point 9:
+    If the audio language is not  english, please consider the audio language as tamil and give the transcription in tamil
+    
+    <Example Start>
+    Full fire, he was going on in his rhetoric, and he stopped and asked, "What do you have to do, to go to heaven?"
+    So, little Mary stood up and said, "If I scrub this church floor every Sunday morning, I will go to heaven." "Absolutely."
+    Another little girl stood up and said, "If I share 50% of my pocket money, to my less privileged friend, I will go to heaven." "Correct."
+    Another little boy stood up and said, "If I help people who are in need, I will go to heaven." "Correct."
+    Little Tommy in the back bench stood up and said, "You got to die first."
+    <Example End>
+    Once the transcription is done, make it into paragraphs of ideas. Use ; between the thought sentences that make up the idea.
+    Below is a full punctuated script to get an idea:
+    Talk:
+    When I say cancerous cells .. every one of our bodies has cancerous cells - But they are disorganized; they are all over the place. 
+    For some reason, if you create certain situations in the body … they will get organized. So from petty crime … to organized crime - serious problem, isn't it? 
+    There are petty criminals everywhere in every town. Here and there, they will do little pick-pocket, this, that, no problem; But if fifty of them get organized in Coimbatore city … then suddenly .. the whole atmosphere in the city    will change … because these fifty guys together can do such things - that it'll become dangerous for you to step on the street.
+    So, that's all is happening in the body. There are cancerous cells - these are criminal cells. They are running around. If they are loafing around by themselves, no problem. If they all gather in one place … if they meet in one       place, and they hit it off … then it's a problem. 
+    So … if the law enforcement is good, they see this: Initially, a criminal is happy picking somebody's pocket - Every day picking pocket; when two of them meet, they will dream of burgling a house; When five of them meet … they will dream of robbing a bank - That's how it is.
+    So.. if the law enforcement is conscious and active … they will make sure - here and there they pick up one guy and throw him in - They will do something … you know… so that they never gather in enough numbers to become a major problem.
+    
+    
+    So the same thing with the body; before they gang up, if you keep breaking them up here and there … killing a few guys….
+     Every day neem just does that - It just reduces; it keeps the number of cancerous cells in the body within a certain percentage … where it doesn't really gang up against the system. So it's a very important thing to consume neem.
+    Only thing about neem is - if you consume it in excess quantity, it is also … it also kills the sperm cells - That is, we will have the fortune of a reduced population … if everybody in the world consumes enough neem. 
+    Because it is a spermicide, it must be consumed in small quantities - because it's not for us to decide what should happen to an individual.
+    And women when they are pregnant - up to four months of pregnancy, or to be safe up to five months of pregnancy … one should not consume neem. 
+    Because it is a spermicide, when the fetus is developing, the role of the sperm is still there … to a certain point. 
+    Four months is what is prescribed … I am saying five months - one can start after five months.</script>
+
+  <script type="text/plain" id="prompt2">
+    Linguistic Punctuation
+
+    I have a script that is structured as below: 
+    This is a dubbing script, The words are intentionally chosen. At any cost don’t change or remove even a single word; Even if it's redundant or grammatically wrong, please keep the words absolutely as it is. Even if it's redundant, keep the words as it is. Because the structure, length and timing needs to be exactly the same - Even the number of alphabets.  
+        
+        As these are the master’s words, please don't summarize or simplify the transcript
+        Do not remove or add any words or letters.
+        Do not remove anything, even if it is redundant or repetition
+        This is a transcript of the already spoken Audio - So do not correct the grammar or change sentence structure. 
+        
+    Just add - as per the below rule. Rest of the punctuations keep them as it is even if they are grammatically off. They are not placed just for grammar, they are markers for the dubbing artist.
+     Within Each Paragraph,
+    
+    
+    Now  with in each sentence, 
+        Use a dash ( - ):
+        To Set Off Parenthetical Information:
+        Example: This is a very important point - one that you shouldn't forget.
+        Example: The students - all 35 of them - were excited for the field trip.
+    
+        To Introduce a List or Explanation:
+        Example: She bought many things - clothes, shoes, and accessories.
+    
+        To Introduce an Explanation:
+        Example: The reason for the delay - traffic congestion - was unavoidable.
+        Example: He is my uncle - who is a 7 feet tall man.
+        Example: Today is Sunday - which is a holiday.
+    
+        To Indicate an Abrupt Break or Change in Thought:
+        Example: I was about to leave - wait, there's someone at the door.
+     
+       To Emphasize a Word or Phrase:
+        Example: The most important thing - and I can't stress this enough - is to be yourself.
+      
+    
+    Place a - before all explanatory phrases provided the below condition is met.
+    Condition: there is a , or … in the given english script before that explanatory phrase.
+        
+    Segmented Script: 
+
+</script>
+  <script type="text/plain" id="prompt3">
+    Linguistic Punctuation
+
+    I have a script that is structured as below: 
+This is a dubbing script, The words are intentionally chosen. At any cost don’t change or remove even a single word; Even if it's redundant or grammatically wrong, please keep the words absolutely as it is. Even if it's redundant, keep the words as it is. Because the structure, length and timing needs to be exactly the same - Even the number of alphabets.  
+    
+    As these are the master’s words, please don't summarize or simplify the transcript
+    Do not remove or add any words or letters.
+    Do not remove anything, even if it is redundant or repetition
+    This is a transcript of the already spoken Audio - So do not correct the grammar or change sentence structure. 
+( - ) is placed to indicate the dubbing artist. So do not change the ( - ) at all.
+    
+Only the punctuation marks should be changed or added as per the below rules. Rest of the punctuations keep them as it is even if they are grammatically off. They are not placed just for grammar, they are markers for the dubbing artist.
+
+
+Within Each Paragraph,
+
+
+The catch is … is placed in the original script to mark the pauses in the speech to the dubbing artist. To the extent possible try to reflect these pauses in the result also. 
+
+when the ... occurs in the middle of the clause then strictly do not change that ...
+when there is a subordinating conjunction after ... strictly do not change that ... 
+When there is a coordinating conjunction after ... then replace that ... with ,
+when the ... occurs at the end of a clause that indicates the proper completion of a thought and there is no subordinating or coordinating conjunction after that, change that ... to;
+
+Another Point: 
+When there is a . between similar kinds of sentences (full complete sentences, not clauses) then use semi colon between them instead of a fullstop.  
+
+Example:
+If you say Dhyanalingam, they'll say Dhyanaling;  If you say Shiva, they'll say Shiv; If you say Rama, they'll say Ram.
+
+
+When there is a . between sentences that are the part of one idea (full complete sentences, not clauses) then use semi colon between them instead of a fullstop.  
+Example: 
+I love to read; books transport me to different worlds; But they are not readily available here. 
+
+
+
+   Very important note:
+    
+    The talk is made up of blocks of points.
+    Each point is made up of blocks of thoughts.
+    Each thought is made up of blocks of information.
+    
+Here Comma (,) is used not just grammatically, but also to mark a brief pause in the speech. So if comma (,) happen to be a place where you would keep a dash semicolon (;) then change that comma (,) to  (;). Otherwise, even if comma (,) happens in a place where it is not needed grammatically, please preserve the comma (,) as it is. Because it represents a pause in the speech there. It is acting like an encryption for time markers here.
+
+    
+    
+Segmented Script:
+
+</script>
+  <script type="text/plain" id="prompt4">Translation to Telugu:
+
+    Instructions for translation:
+    
+      Below is the Transcript of an English Talk by sadhguru addressing Audience.
+    The talk is made up of blocks of points.
+    Each point is made up of blocks of thoughts.
+    Each thought is made up of blocks of information.
+    
+    We have used … , ; - . and ? to mark the boundaries of Information blocks, thoughts and ideas.
+
+… indicates a pause in between the sentences.
+, indicates a pause between meaningful chunks that make up the sentence.
+; indicates connected sentences.
+- indicates additional information related to the main idea of the sentence.
+<Gesture> </Gesture> indicates the portion of the sentences for which there is a corresponding significant body language shown in the video.
+    Now do not change ; and , and - in the result. They are not just grammatically placed, they are like markers for time spacing information for the dubbing artist. So dont change them, even though grammatically it seems better to  change.
+    
+Translation Need 1:
+Creating Telugu Script:
+Give the telugu talk for this with the same segment, thought and idea structure.
+stick to the same sequence and pauses between the segments, thoughts and ideas.
+Preserve the sequence of the flow of ideas, even though the telugu language flow needs to be compromised a bit.
+
+Translation Need 2:
+Polishing the Script into a day to day spoken style:
+The Challenge here is, as we try to keep the information conveyed in the same timing, length and order - Because of the structural difference between English and Telugu Languages - Some sentences in the script came like broken pieces. For example, let us say there are two blocks. In natural English Flow it is Block A followed by block B. And to maintain the sequence we placed it as Block A followed by block B In telugu translation also. But in natural telugu flow, it makes a complete thought when it is Actually Block  B followed by Block A. But Video syncing is important, So we are keeping it as block A followed by Block B in telugu also.
+    
+Now your job is, let us say you are someone who is well versed in general day to day spoken telugu. 
+    
+Now your goal is to make the script into a day to day spoken style. It means not changing the content or the structure of the sentence. Just smoothening the segments wherever they look like written telugu instead of spoken telugu. Means making the segment as concise as possible, at the same time, not missing any detail. It means removing the part that are redundant when spoken - but are needed while written. That means, we are minimising the or shortening the expression. But not changing the expression. 
+    
+    Scenario 1.
+    In telugu the translations for a, an and the are not needed - unless in specific cases.
+    
+    
+    Scenario 2.
+    In telugu in most cases, there is no need for an explicit pronoun, as pronouns will be implicit in the verb most of the time.
+    
+    
+    Scenario 3: Preferred word pairs
+    Dimension - పార్శ్వం
+    You know - తెలుసా ..
+    Life - జీవం
+    People - ప్రజలు
+    Intense  - తీక్షణత
+    Lifetime - జన్మ
+    essentially - ప్రాథమికంగా 
+    
+    
+    Scenario 4: 
+    Attached is the link for the Audio of the talk.
+    This applies only to the segments that are lengthy in telugu.
+    
+    In English the segment is spoken with fewer words, but in Telugu the written style contains more words which will exceed the time of the English segment. Mainly in such cases, we try to make the segment short - by removing the details that are already implicit based on the previous sentences, and by combining the words like we do while talking. And in some cases even though the words are more, sadhguru speaks them fast. In such cases also shortening is needed. By analyzing the audio, please shorten the segments as and when necessary.
+    
+    
+    Example 1:
+    Fast spoken English segment: I'm not saying these things are wrong.
+    Telugu Lengthy sentence: నేను అవి తప్పని అనడం లేదు
+    Telugu Shortened Sentence: నేనివి తప్పనట్లేదు.
+    
+    
+    Example 2:
+    Fast spoken English segment: Not some fanciful thing that I want to do or you want to do.
+    Telugu Lengthy sentence: అంతేగాని, నేను చేయాలనుకునే లేదా మీరు చేయాలనుకునే ఏదో ఫ్యాన్సీ విషయంపై కాదు.
+    Telugu Shortened Sentence: అంతేగాని, నేనో లేక మీరో చేయాలనుకునే ఏదో ఫ్యాన్సీ విషయంపై కాదు.
+    
+    
+    
+    Example 3:
+    Fast spoken English segment:There are many others who would like to be you. 'Oh, I wish I was 20 and I wish I could think what to do.
+    Telugu Lengthy sentence:   'అయ్యో, 20 ఏళ్లప్పుడు ఏం చేయాలో ఆలోచించగలిగి ఉంటే ఎంత బాగుండేది. ఆ సమయంలో నేను ఏదో చేసేశాను.' అనుకునే వాళ్ళు ఇక్కడ ఎంతోమంది ఉన్నారు.
+    Telugu Shortened Sentence: 'అయ్యో, 20 ఏళ్లప్పుడు ఏం చేయాలో ఆలోచిస్తే బాగుండేది. అప్పట్లో ఏదో చేసేశాను.' అనుకునే వాళ్ళు ఇక్కడ ఎంతోమంది ఉన్నారు.
+    
+    
+    
+    Additional key areas to focus on:
+    
+    Aspect: Sync
+    English: 
+    there is nothing wrong with the world;  There is only one problem on this planet - human being;
+    Basic Translation: 
+    ప్రపంచంలో ఏ లోపమూ లేదు; ఈ భూమి మీద ఉన్న సమస్య ఒక్కటే - అది మనిషి;
+    Optimized Translation:
+    ప్రపంచంలో ఏ లోపమూ లేదు; ఈ భూమ్మీద ఉన్న ఏకైక సమస్య - మనిషి!
+    Details of optimization:
+    ‘ఏకైక’ is moved a bit ahead to come in sync with the english word ‘only one’
+    
+    
+    Aspect: Missing Detail
+    English: So you must fix yourself, you must engineer yourself the way you think is the best way to be for a human being;
+    Basic Translation: కాబట్టి - మనిషిగా ఉండటానికి ఏది ఉత్తమమైన మార్గమో, ఆ విధంగా మిమ్మల్ని మీరే సరిచేసుకుని, మలచుకోవాలి;
+    Optimized Translation:కాబట్టి - మనిషిగా ఉండటానికి ఏది ఉత్తమమైన మార్గం అనుకుంటారో, ఆ విధంగా మిమ్మల్ని తీర్చిదిద్దుకుని మలచుకోవాలి;
+    Details of optimization:‘అనుకుంటారో’ is the detail for ‘you think is’
+    
+    
+    
+    Aspect: Missing Detail
+    English:  For this, you need to do a little bit of Inner Engineering 
+    Basic Translation:  దీని కోసం, కొంచెం ఇంజనీరింగ్ చేసుకోవాలి;
+    Optimized Translation:దీని కోసం, మీ అంతరంగాన్ని కొంచెం ఇంజనీరింగ్ చేసుకోవాలి;
+    Details of optimization:‘అంతరంగాన్ని’ is the detail for ‘Inner’
+    
+    
+    
+    
+    
+    
+    Aspect: Thought Flow
+    
+    English: 
+    Living strong means your level of experience is intense and enormous. 
+    
+    Your level of experience will become enormous - only when your level of attention is absolute. 
+    Basic Translation: 
+     బలంగా బ్రతకడమంటే - మీ అనుభూతి స్థాయి తీవ్రంగా, అపారంగా ఉండటం.
+    
+    ఎప్పుడైతే మీ శ్రద్ధ సంపూర్ణంగా ఉంటుందో, అప్పుడే మీ అనుభూతి స్థాయి కూడా అపారంగా ఉంటుంది.
+    
+    Optimized Translation:
+    బలంగా బ్రతకడమంటే - మీ అనుభూతి స్థాయి తీక్షణంగా, అపారంగా ఉండటం.
+    
+    మీ అనుభూతి స్థాయి అపారంగా అయ్యేది, మీ శ్రద్ధ సంపూర్ణంగా ఉన్నప్పుడే! 
+    Details of optimization:
+    Let us take these two sentences as A and B.  'The enormity of experience’ is in the ending portion of A  and is in the beginning portion of B. Thus ensuring a smooth flow of thoughts and connectivity.
+    
+    Aspect: Thought Flow
+    English: 
+    what's happening here is not a simple phenomena - in terms of life; 
+    Basic Translation: 
+    మీ చుట్టూ ఉన్న ప్రతీదానిపై మీరు సంపూర్ణ శ్రద్ధతో ఉంటే, ఓహ్! అప్పుడు తెలుస్తుంది, ఇక్కడ జరుగుతున్నది జీవపరంగా ఒక మామూలు విషయం కాదని; 
+    Optimized Translation:
+    మీ చుట్టూ ఉన్న ప్రతీదానిపై సంపూర్ణ శ్రద్ధతో ఉంటే, ఓహ్! అప్పుడు తెలుస్తుంది, ఇక్కడ జరుగుతున్నది ఒక మామూలు విషయం కాదని! జీవపరంగా!  
+    Details of optimization:
+    జీవపరంగా is the Secondary detail, and it comes at the end just like ‘in terms of life’ in english sentence.
+    ! to indicate an unnatural ending in telugu.
+    
+    
+    Aspect: Thought Flow
+    English: 
+    Human possibility is this - through millions of years of evolution, we've reached a point - that we can sprout the divine seed, that is… sown in every piece of life; Even an amoeba has it, but it cannot sprout it. It's the privilege of being human - that you can sprout it. 
+    Basic Translation: 
+    మనిషికి ఉన్న శక్యత ఇదే -  కొన్ని వేల ఏళ్ల  పరిణామ క్రమంలో, మనం ఏ దశకు  చేరామంటే -  జీవం గల ప్రతి అంశలో నాటబడిన ఆ దివ్యబీజాన్ని, మనం అంకురింపజేయగలం. ఒక అమీబాలో కూడా అది ఉంది - కానీ అది దాన్ని మొలకెత్తించలేదు. మనిషికి గల విశిష్టత ఇదే - దాన్ని మీరు మొలకెత్తించగలరు. 
+    Optimized Translation:
+    మనిషికి ఉన్న శక్యత ఇదే -  కొన్ని వేల ఏళ్ల  పరిణామ క్రమంలో, మనం ఏ దశకు  చేరామంటే -  మనలోని  దివ్యబీజాన్ని అంకురింపజేయగలం - అది ప్రతి ప్రాణిలోనూ నాటు బడి ఉంది, ఒక అమీబాలో కూడా ఉంది - కానీ అమీబా దాన్ని మొలకెత్తించలేదు. మనిషికి గల విశిష్టత ఇదే - దాన్ని మీరు మొలకెత్తించగలరు. 
+    Details of optimization:
+    ‘that we can sprout the divine seed, that is… sown in every piece of life’ 
+    
+    The secondary detail ‘అది ప్రతి ప్రాణిలోనూ నాటు బడి ఉంది’ is coming after the main Idea ‘మనలోని  దివ్యబీజాన్ని అంకురింపజేయగలం’ 
+    
+    
+    
+    Aspect:  Exact detail without deviation
+    
+    English: 
+    Though I am known to be a yogi - very analytical and logical - essentially, I have always lived my life as a devotee.
+    Basic Translation: 
+    నన్నందరూ చాలా విశ్లేషణాత్మక, తార్కిక యోగిలా అనుకుంటారు గానీ   నిజానికి  నేను నా జీవితాన్ని ఎప్పుడూ ఒక భక్తుడిగానే గడిపాను. 
+    Optimized Translation:
+    నన్నందరూ చాలా విశ్లేషణాత్మక, తార్కిక యోగిగా చూసినప్పటికీ, ప్రాథమికంగా,  నా జీవితాన్ని ఎప్పుడూ ఒక భక్తుడిగానే గడిపాను. 
+    Details of optimization:
+    ‘అనుకుంటారు ‘ is little deviation for what is said. యోగిగా ‘చూసినప్పటికీ’ is more closer to the actual detail ‘known to be’ in english.
+    
+    నిజానికి is conveying a contradiction. ప్రాథమికంగా is conveying different levels of things. this is for the word ‘essential’
+    
+    
+    Aspect:  Exact detail without deviation
+    
+    English: 
+     The very way I walk, speak, and do anything that I do - ‘devotion is one thing’ that I don't show. 
+    Basic Translation: 
+    నేను నడిచే తీరులో, మాట్లాడే తీరులో, నేను చేసే ప్రతీ పనిలో-  భక్తి ఒక్కటినీ  నేను పైకి చూపను.
+    Optimized Translation:
+    నడిచే తీరులో, మాట్లాడే తీరులో, చేసే ప్రతీ పనిలో, నేను పైకి చూపని ఒక అంశం - భక్తి!
+    Details of optimization:
+    Expression and stress is retained. 
+    
+    
+    Aspect:  Modulation Ques
+    
+    English: I want you to understand... how difficult the spiritual process is going to be for you - is determined by you - not by nature and not by your guru.
+    Basic Translation: 
+    మీరొక విషయం అర్థం చేసుకోవాలి... ఆధ్యాత్మిక ప్రక్రియ మీకు ఎంత కష్టంగా ఉండబోతోందన్నది... మీ వల్లే నిర్ణయించబడుతుంది, ప్రకృతి వల్ల కాదు, మీ గురువు వల్ల కాదు.
+    Optimized Translation:
+    మీరొక విషయం అర్థం చేసుకోవాలి... ఆధ్యాత్మిక ప్రక్రియ మీకు ఎంత కష్టంగా ఉండబోతోందన్నది... మీ వల్లే నిర్ణయించబడుతుంది - ప్రకృతి వల్ల కాదు, మీ గురువు వల్ల కాదు.
+    Details of optimization:
+    Once one thought is completed and next there is additional information, use - at the end of the main thought, so that the dubbing artist will complete that thought, and again adds information after that - instead of reading the whole thing like a list of things.
+    
+    
+    
+    Aspect:  Modulation Ques
+    
+    English:  
+    If you don't make it, it's not a question of you failing, it's a question of me failing. 
+    Basic Translation: 
+    మీరు సఫలం కాకపోతే, అది ‘మీరు’ విఫలమవటం గురించిన  ప్రశ్న కాదు, ‘నేను’ విఫలమవటం గురించిన ప్రశ్న.
+    Optimized Translation:
+    మీరు సఫలం కాకపోతే, అది ‘మీరు’ విఫలమవటం గురించిన  ప్రశ్న కాదు, ‘నేను’ విఫలమవటం గురించిన ప్రశ్న.
+    Details of optimization:
+    Keep the words that need stress in Quotes. So that with stress on the correct word in the modulation, correct meaning is conveyed.
+    
+    
+    
+    
+    
+    
+    <Full script Example  Start>
+    
+    Unpolished script:
+    ప్రశ్న:
+    నమస్కారం సద్గురు. నేను 20 ఏళ్ల యూనివర్సిటీ విద్యార్థిని; సత్యం, నిమగ్నత, పరిపూర్ణతతో కూడిన జీవితం కోసం ఆకాంక్షిస్తున్నాను. ఇక నేనూ, నా వయసు వాళ్ళు... మా అంతర్గత మార్గాన్ని, బాహ్య ప్రపంచంతో ఎలా సమతుల్యం చేసుకోవాలి? అది మెడికల్ స్కూల్ కెళ్లడమైనా, ఒక ప్రొఫెషనల్ కెరీర్ ని సంపాదించుకోవడమైనా, లేదా ఆశ్రమంలో ఎక్కువ సమయం గడపడమైనా!
+    సద్గురు:
+    చూడండి, మనమందరం ఈ విశ్వంలో జీవించాల్సిందే; ప్రస్తుతానికి ఈ విషయంలో మనకి వేరే దారి లేదు. కానీ యూనివర్సిటీ అనేది ఒక ఎంపిక; అందుకే మీరు ఈ ప్రశ్న అడుగుతున్నారు - 'ఎంత సమయం కేటాయించాలి?' అని.
+    కొన్ని పనులు చేయడానికి... చదువుకి విలువ ఉంటుంది. కానీ “మనం ఏం చేస్తూ ఉండాలి - ఒక్కో మానవుడిగా, ఒక తరం ప్రజలుగా? మన జీవితాల్లో మనం ఏం చేస్తూ ఉండాలి?”
+    
+     నేను చెప్పేది ఏంటంటే - ఒక యువకుడిగా, మీరు కళ్ళు తెరిచి ప్రపంచాన్ని చూడాలి. ఇప్పుడు, దయచేసి ఒక్కసారి చూడండి - ఈ ప్రపంచానికి ప్రస్తుతం అత్యంత అవసరమైన విషయం ఏంటి? మీకు నచ్చిందని ఏదో ఒక ఫ్యాన్సీ పని చేయకూడదు; ఏది అత్యంత అవసరమో - అదే చేయాలి, కదా? అంతే కదా?
+    పరిస్థితులకు లోనైపోతే, మనుషులు అలా తయారవుతారు; అది ఉపయోగకరమే, కానీ అది ప్రాథమికమైనది కాదు. 
+    
+    ఈ రోజు మీరు ఒక రైలు తగలబడటం చూసి, ఫైర్‌ఫైటర్ అవ్వాలనుకుంటారు; రేపు ఇంకేదో చూసి, అది అవ్వాలనుకుంటారు. భావోద్వేగ ప్రతిస్పందనతో, ఏదో ఒకటి అవ్వాలని మీరు ఎంచుకుంటారు; అది ఒక స్థాయిలో ఉపయోగపడొచ్చు. కానీ ఇప్పుడు, చాలా మంది యువకులు ఆలోచించలేని ఈ సమయంలో, మీరు, ‘నా జీవితంతో నేనేం చేయాలి?’ అని ఆలోచిస్తున్నారు. అలాంటి ఆలోచన వచ్చినప్పుడు, నేను చెప్పేది ఏంటంటే - దానిపై మరికొంత సమయం గడపాలి; ఎవరివల్లా, దేనివల్లా ప్రభావితం కాకుండా, కేవలం ఇలా చూడండి - “మానవాళికి అత్యంత అవసరమైనది ఏంటి? ఈ రోజు ప్రపంచానికి అత్యంత అవసరమైనది ఏంటి?” - దాన్ని మీరు గుర్తించాలి.
+    ఈ గ్రహం మీద సరిచేయాల్సిన ఏకైక విషయం మనుషులే; మిగతాదంతా బాగానే ఉంది, కదా? కాబట్టి, నేను చెప్పేది, యువకులందరూ - కేవలం మీరు మాత్రమే కాదు - మీరు చేస్తున్న దాని నుండి ఒక విరామం తీసుకోవాలి. 
+    మీరు ఎందుకిలా ఇరుక్కుపోయారంటే - స్కూల్ చేశారు, కాలేజీకి వెళ్లారు, అది చేశారు కాబట్టి, దాని తర్వాత ఇంకోటి, ఆ తర్వాత మరొకటి - అలా వెళ్ళిపోయి, చివరికి ఒక PhD తో ముగిస్తారు... ఏం చేయాలి? అది ప్రమాదకరం, తెలుసా. ఎందుకంటే విద్యా శాస్త్రవేత్తలు ఏమంటున్నారంటే, మీరు 20 ఏళ్ళ సంప్రదాయ విద్య గుండా వెళ్ళి, ఒక PhD లాంటి దానితో స్థిరపడితే, అది మీ మేధస్సులో 70 శాతాన్ని శాశ్వతంగా నాశనం చేస్తుంది; మీరు చాలా జ్ఞానమున్న తెలివితక్కువ వాళ్ళుగా తయారవుతారు.
+    ఇంకా ఈ రోజుల్లో జ్ఞానానికి విలువే లేదు; ఎందుకంటే ఒక PhD ఉన్నవాళ్ళకి ఏం తెలుసో, ఒక హైస్కూల్ పిల్లాడు కూడా ఇంటర్నెట్ చూసి అదే పరిభాష మాట్లాడగలడు. మీరు సేకరించిన ఈ జ్ఞానంతో... ఇకపై తెలివైనవారిగా కూడా కనిపించలేరు, కదా? ఎందుకంటే ఇంచుమించు ప్రతీ ఒక్కరూ ఈ విషయాలు మాట్లాడతారు - ఎందుకంటే అదంతా ఇప్పుడు ఎక్కడపడితే అక్కడ దొరుకుతోంది.
+    కాబట్టి మీరు ఒక యూనివర్సిటీ కోసం సిద్ధమవుతున్నారా... లేక యూనివర్స్  కోసమా? మీరు జీవించాల్సింది అక్కడే. మీరు ఒక విద్యావేత్త అవ్వాలనుకుంటే తప్ప - నేను ఈ విషయాలు తప్పని చెప్పట్లేదు. కానీ తెలివైన వారు - తమ జీవితాన్ని అత్యంత అవసరమైన దాని వైపు వెచ్చించాలి, కదా? అంతేగాని, నేను చేయాలనుకుంటున్నాననో లేదా మీరు చేయాలనుకుంటున్నారనో - ఏదో ఒక ఫ్యాన్సీ విషయంపై కాదు.
+    మీరు ఏ పనైనా - ఆనందంగా లేదా బాధగా చేయొచ్చు, కదా? కేవలం... 'ఇది చేస్తే నేను సంతోషంగా ఉంటాను' అని ఈ రోజు మీరు అనుకుంటున్నారు కాబట్టి, కొంత కాలం తర్వాత కూడా అదే పని చేయడం వల్ల మీరు సంతోషంగా ఉంటారని మాత్రం ఎప్పుడూ అనుకోవద్దు. ప్రతి ఒక్కరి జీవితంలోనూ, వాళ్లకి మొదటి ఉద్యోగం వచ్చినప్పుడు, అదెంత అద్భుతమైన రోజో కదా; మీరు ఆ పాత చింకి ఆఫీసుకి వెళ్లి, అక్కడ కూర్చుంటే, వావ్. ఎలా అనిపించి ఉంటుందో! 
+    కానీ కొన్ని సంవత్సరాల తర్వాత, అదే టేబుల్ వెనుక కూర్చోవడం... మీ ప్రాణం తీస్తున్నట్టుగా ఉంటుంది; అదే ఉద్యోగం, అదే పెళ్లి, అవే పరిస్థితులు - మీ ప్రాణాన్ని తీస్తుంటాయి. ఒకప్పుడు స్వర్గంలా కనిపించినవే; కొంత కాలం తర్వాత నరకంలా కనిపిస్తాయి, కదా?
+    ఆ ఉద్యోగాలలో ఏదో తప్పు ఉందని కాదు; కేవలం మీరు దాన్ని తప్పుడు కారణాలతో చేస్తున్నారు. మీరు వాటిని కేవలం తప్పుడు కారణాల కోసం చేస్తున్నారు, అంతే.
+    ఇప్పుడు మీరు ఆలోచిస్తున్నారు కాబట్టి, నేను చెప్పేది - కొన్ని వారాలు విరామం తీసుకోమని; ఆ అవకాశం కల్పించడానికి మేము సిద్ధంగా ఉన్నాం. ఎవరి చేతా ప్రభావితం కాకుండా, కేవలం కూర్చుని, దాన్ని గమనించండి. తక్షణ అవసరాల కారణంగా, ఇప్పుడు మీరు చేయాలనుకునేవి చాలా ఉంటాయి - ప్రస్తుతం మీ దగ్గర డబ్బు లేదు; అందుకే మొదటి పని ఒక ఉద్యోగం వెతుక్కోవాలని అనుకుంటారు. లేదా మీలో ఉన్న మరేదైనా ఒత్తిడి వల్ల, ముందు ఇది చేయాలని అనుకుంటారు. మీ ఒత్తిడులను పక్కన పెడితే, ఒకవేళ మీకు ఈ ఒత్తిడులేవీ లేవనుకోండి, అప్పుడు జీవితంతో మీరేం చేయాలనుకుంటారు? మీరు చేయాల్సింది అదే.
+    మీరు మీ జీవితాన్ని, మీ జీవిత గమనాన్ని తక్షణ అవసరాల ఆధారంగా నిర్ణయించుకోకూడదు; మీరు ఏది చేసినా, దాన్ని 100 సంవత్సరాలు చేశాక వెనక్కి తిరిగి చూసుకుంటే... ఆ 100 ఏళ్ల తర్వాత కూడా, ‘అది ఇంకా విలువైనదేనా?’ అని చూసుకోండి. అలాంటి దాన్నే మీరు చేయాలి. 
+    
+    మీలా ఉండాలని కోరుకునే వాళ్ళు ఇక్కడ చాలా మంది ఉన్నారు. 'అయ్యో, నేను 20 ఏళ్ల వయసులో ఉండి, ఏం చేయాలో ఆలోచించగలిగి ఉంటే ఎంత బాగుండేది. కానీ ఆ సమయంలో నేను ఏదో చేసేశాను.' అని అనుకునే వాళ్ళు ఇక్కడ ఎంతోమంది ఉన్నారు. ఇప్పుడు మీకు 20 ఏళ్లు, మీరు ఆలోచిస్తున్నారంటే అది మీ అదృష్టం, మీరు ఇక్కడ ఉండటం కూడా మీ అదృష్టం, కాబట్టి మీరు ఏదైనా చేసే ముందు సరిగ్గా ఆలోచించాల్సిన సమయం ఇది.
+    
+    Polished script:
+    ప్రశ్న:
+    నమస్కారం సద్గురు. నేను 20 ఏళ్ల యూనివర్సిటీ విద్యార్థిని;
+    
+    సద్గురు:
+    క్షమించండి! 
+    
+    ప్రశ్న:
+    నేను 20 ఏళ్ల యూనివర్సిటీ విద్యార్థిని; సత్యం, నిమగ్నత, పరిపూర్ణతతో కూడిన జీవితం కావాలనుకుంటున్నాను. నేనూ, నా వయసు వాళ్ళు... మా అంతర్గత మార్గాన్ని, బాహ్య ప్రపంచంతో ఎలా సమతుల్యం చేసుకోవాలి? అది మెడికల్ స్కూల్ కెళ్లడమైనా, ప్రొఫెషనల్ కెరీర్ అయినా, లేదా ఆశ్రమంలో ఎక్కువ సమయం గడపడమైనా!
+    సద్గురు:
+    చూడండి మనందరం ‘ఈ యూనివర్స్’లో జీవించాల్సిందే; ఈ విషయంలో ప్రస్తుతానికి వేరే ఎంపిక లేదు. 
+    కానీ యూనివర్సిటీ అనేది ఎంపిక; అందుకే ఈ ప్రశ్న అడుగుతున్నారు - 'ఎంత సమయం కేటాయించాలి?!'
+    కొన్ని పనులు చేసే విషయంలో ... చదువుకి విలువ ఉంటుంది. 
+    కానీ, “జీవితంలో ఏం చేయాలి?! - ఒక మనిషిగా, ఒక తరం ప్రజలుగా? - మన జీవితాల్లో మనం ఏం చేయాలి?!”
+    
+    నేనేమంటానంటే  - ఒక యువకుడిగా, మీరు కళ్ళు తెరిచి ప్రపంచాన్ని పరిశీలించాలి.
+    దయచేసి పరిశీలించండి - ప్రస్తుతం  ఈ ప్రపంచానికి అత్యవసరమైన విషయం ఏంటో చూడండి; మీకు నచ్చిందని ఏదో ఫ్యాన్సీ పని చేయడం కాదు, ఏది అత్యంత అవసరమో అది చేయాలి, అవునా? అవునా కాదా?
+    పరిస్థితులకు లోనైపోతే, ప్రజలు ఇలా అవుతారు … 
+    అది ఉపయోగకరమే, కానీ అది మౌలికమైనది కాదు. 
+    ఈ రోజు ఓ రైలు తగలబడటం చూసి, ఫైర్‌ఫైటర్ అవ్వాలనుకుంటారు; రేపు ఇంకేదో చూసి, అది అవ్వాలనుకుంటారు. భావోద్వేగ ప్రతిస్పందనతో, ఏదో ఒకటి అవ్వాలని ఎంచుకుంటే, అది ఒక స్థాయిలో ఉపయోగపడొచ్చు; కానీ ఇప్పుడు, చాలా మంది యువకులు ఆలోచించలేనప్పుడు, మీరు ఆలోచిస్తున్నారు - ‘నా జీవితంతో నేనేం చేయాలి?’ అని! 
+    అలాంటి ఆలోచన వచ్చినప్పుడు, నా సలహా - దానిపై మరికొంత సమయం గడపాలి! ఎవరివల్లా, దేనివల్లా ప్రభావితం కాకుండా, పరిశీలించండి - “మానవాళికి అత్యంత అవసరమైనది ఏంటి?!” 
+    ఈ రోజు ప్రపంచానికి అత్యవసరమైనది ఏంటో - మీరు గుర్తించాలి.
+    ఈ భూమ్మీద సరిచేయాల్సిన ఏకైక విషయం మనుషులే; మిగతాదంతా బాగానే ఉంది, అవునా? 
+    కాబట్టి, నేనేమంటానంటే, యువకులందరూ - కేవలం మీరే కాదు - చేస్తున్న దాని నుండి ఓ విరామం తీసుకోవాలి. 
+    ఇరుక్కుపోయారు - స్కూల్ చదివారు, కాలేజీకి వెళ్లారు, అది చేశారు కాబట్టి, దాని తర్వాత ఇంకోటి, ఆ తర్వాత మరొకటి - ఇలా చేస్తూ,  PhD తో ముగిస్తారు... ఏం చేయడానికి? అది ప్రమాదకరం, తెలుసా?!
+    ఎందుకంటే విద్యా శాస్త్రవేత్తలు, ‘మీరు 20 ఏళ్ళ ఫార్మల్ ఎడ్యుకేషన్  గుండా వెళ్ళి, PhD లాంటిది పూర్తి చేసినప్పుడు, మీ మేధస్సులో 70 శాతం శాశ్వతంగా నాశనం అవుతుంది” అంటున్నారు; 
+    అవును, మీరు చాలా జ్ఞానమున్న మూర్ఖులవుతారు.
+    ఇంకా ఈ రోజుల్లో జ్ఞానానికి విలువే లేదు; ఎందుకంటే, ఒక PhD ఉన్నవాళ్ళకి ఏం తెలుసో, ఓ హైస్కూల్ పిల్లాడు కూడా ఇంటర్నెట్ చూసి అదే పరిభాష మాట్లాడగలడు. మీరు సేకరించిన ఈ జ్ఞానంతో ఇకపై తెలివైనవారిగా కూడా కనిపించలేరు, అవును? ఎందుకంటే ఇంచుమించు ప్రతీ ఒక్కరూ ఈ విషయాలు మాట్లాడగలరు - ఎందుకంటే అది అంతటా దొరుకుతోంది.
+    కాబట్టి మీరు యూనివర్సిటీ కోసం సిద్ధమవుతున్నారా? ... లేక యూనివర్స్ కోసమా? - మీరు జీవించాల్సింది అక్కడే! విద్యావేత్త అవ్వాలనుకుంటే తప్ప!
+    నేనివి తప్పనట్లేదు.. కానీ తెలివైన వారు - తమ జీవితాన్ని, అత్యంత అవసరమైన దాని వైపు వెచ్చించాలి, అవునా? అంతేగాని, నేనో లేదా మీరో చేయాలనుకునే ఏదో ఫ్యాన్సీ విషయంపై కాదు.
+    ఏ పనైనా ఆనందంగా చేయొచ్చు లేదా బాధగా చేయొచ్చు, అవునా?
+    అలాగే... ఇవాళ 'ఇది చేస్తే నేను సంతోషంగా ఉంటాను' అనిపించిందని అటుగా వెళితే, కొంత కాలం తర్వాత కూడా అదే పని ద్వారా సంతోషంగా ఉంటారని అనుకోకండి. 
+    ప్రతి ఒక్కరి జీవితంలో మొదటి ఉద్యోగం వచ్చినప్పుడు…  అదెంత అద్భుతమైన రోజో కద!
+    మీరు ఆ పాత చింకి ఆఫీసుకి వెళ్లి, అక్కడ కూర్చుంటే, వావ్!
+    ఎలా అనిపించిందో!!
+     
+    కానీ కొన్నేళ్ల తర్వాత, అదే టేబుల్ వద్ద కూర్చోవడం... మీ ప్రాణం తీస్తున్నట్టుగా ఉంటుంది; అదే ఉద్యోగం, అదే పెళ్లి, అవే పరిస్థితులు - మీ ప్రాణాన్ని తీస్తుంటాయి. ఒకప్పుడు స్వర్గంలా కనిపించాయి, కొంత కాలం తర్వాత నరకంలా కనిపిస్తాయి, కదా?
+    ఆ ఉద్యోగాలలో ఏదో తప్పుందని కాదు; మీరు దాన్ని సరికాని కారణాలకు చేయడం వల్ల! మీరు వాటిని తప్పుడు కారణాల కోసం చేస్తున్నారు, అంతే.
+    ఇప్పుడు మీరు ఆలోచిస్తున్నారు కాబట్టి, నా సలహా - కొన్ని వారాలు విరామం తీసుకోండి; మీకా అవకాశం కల్పించడానికి మేము సిద్ధంగా ఉన్నాం. ఎవరి చేతా ప్రభావితం కాకుండా, సమయం తీసుకుని, పరిశీలించండి. 
+    ప్రస్తుతం మీకు ‘చేయాలి’ అనిపించేవి చాలా ఉంటాయి - తక్షణ అవసరాల కారణంగా! 
+    ప్రస్తుతం మీ దగ్గర డబ్బు లేదు, మొదట ఓ ఉద్యోగం పొందాలనుకుంటారు. లేదా మీలోని మరేదైనా బలవంతం వల్ల, ముందు ఇది చేయాలనుకుంటారు. 
+    మీ ఒత్తిళ్లను పక్కన పెడితే, ఈ ఒత్తిడులేవీ లేవనుకోండి, అప్పుడు జీవితంతో మీరేం చేయాలనుకుంటారు? - మీరు చేయాల్సింది అదే.
+    మీ జీవితాన్ని, మీ జీవిత గమనాన్ని తక్షణ అవసరాల ఆధారంగా నిర్ణయించుకోకూడదు; మీరు ఏది చేసినా, దాన్ని 100 సంవత్సరాలు చేశాక వెనక్కి తిరిగి చూసుకుంటే... ఆ 100 ఏళ్ల తర్వాత కూడా, ‘అది ఇంకా విలువైనదేనా?’ అని చూసుకోండి. అలాంటి దాన్నే చేయాలి. 
+    మీలా ఉండాలని కోరుకునే వాళ్ళు చాలా మంది ఉన్నారు… 
+    'అయ్యో, 20 ఏళ్లప్పుడు ఏం చేయాలో ఆలోచిస్తే బాగుండేది. అప్పట్లో ఏదో చేసేశాను' అనుకునే వాళ్ళు ఇక్కడ ఎంతోమంది ఉన్నారు.
+    ఇప్పుడు మీకు 20 ఏళ్లు, పైగా ఆలోచిస్తున్నారంటే అది అదృష్టం, అలాగే ఇక్కడ ఉండటం అదృష్టం - కాబట్టి ఏదైనా చేసే ముందు సరిగ్గా పరిశీలించాల్సిన సమయమిది.
+    
+    <Full script Example End>
+ In the result please give only the polished script. No need to give the original script and additional information.
+    
+
+    
+
+Translation Need 3:
+Matching the Gestures:
+Optimizing the initial translation to match the gestures in the Video
+    
+Now do not change … and ; and , and - in the result. They are not just grammatically placed, they are like markers for time spacing information for the dubbing artist. So don't change them, even though grammatically it seems better to  change.
+
+
+Now I want you to optimize the script in these three areas in this order of priority.
+
+When dubbing is done, the gesture in the video and the corresponding telugu word should occur at the same time.
+ 
+For this, Where there are tags that indicate the gestures in the video, make sure in the translation also the corresponding word or phrase comes at the same timing within the sentence as in English. 
+
+where there are no gestures in the dialogue, and the flow of the telugu dialogue is too unnatural, reframe it into a natural flow, but keep the same pauses, lengths of the segments and overall length of the dialogue. Very important - not to sacrifice the flow between the dialogues for the sake of the flow within the dialogue. like if the ending object of this dialogue is the subject of the next dialogue, then make sure the reframing also keeps this object towards the end of this dialogue. so that there is continuity of thought.
+
+
+Few Examples of how i optimized the sentence to match the gesture timing are below:
+Example 1
+
+
+English :
+Being in love… is very different from… <Gesture>I love you, you love me</Gesture>;
+
+Telugu :
+ప్రేమించడం అనేది <Gesture>‘నేను నిన్ను ప్రేమిస్తున్నాను, నువ్వు నన్ను ప్రేమించు’</Gesture> అనేదానికి చాలా భిన్నం;
+
+
+Optimized:
+ప్రేమలో ఉండడం వేరు;  <Gesture>‘నేను నిన్ను ప్రేమిస్తున్నాను, నువ్వు నన్ను ప్రేమించు’ </Gesture>అనేది వేరు;
+
+Description :
+As the phrase with gesture is in the second half of the sentence, have made the Telugu sentence also into two halves, and made the phrase with gesture come in the second half.
+
+
+
+
+Example 2
+
+
+English :
+that’s a transaction - <Gesture>I will love you, you love me</Gesture>.
+
+Telugu :
+‘<Gesture>నేను నిన్ను ప్రేమిస్తాను, నువ్వు నన్ను ప్రేమించు</Gesture>’ అనేదో లావాదేవీ.
+
+Optimized:
+ఇదో లావాదేవీ - ‘<Gesture>నేను నిన్ను ప్రేమిస్తాను, నువ్వు నన్ను ప్రేమించు</Gesture>’ అనేది!
+
+Description :
+As the phrase with gesture is in the second half of the sentence, have made the Telugu sentence also into two halves, and made the phrase with gesture come in the second half.
+
+
+
+
+Example 3
+
+
+English :
+Only those who do not know … the fulfillment of what it means to be in love… they are always thinking <Gesture>what will I get</Gesture>;
+
+Telugu :
+ప్రేమించడం లోని సంతృప్తి  తెలియని వారే, ఎప్పుడూ <Gesture>‘నాకేం లాభం?’</Gesture> అని ఆలోచిస్తుంటారు;
+
+Optimized:
+కేవలం ఇది తెలియని వారే - ప్రేమలో ఉండడంలోని సంతృప్తి  తెలియని వారే - ఎప్పుడూ <Gesture>‘నాకేం వస్తుంది’</Gesture> అని చూస్తుంటారు. 
+
+Description :
+The telugu sentence is too short, even though the gesture sentence came towards the end of the sentence, as the telugu sentence is short, when the dubbing is attached to the english video, the corresponding gesture phrase comes ahead of the actual gesture in the video. So we made the sentence long enough so that the gesture phrase and the gesture comes at the same time.
+
+
+
+
+
+Example 4
+
+
+English :
+So where is our world? Our world is in our body and in our mind.
+
+Telugu :
+మరి మన లోకం ఎక్కడుంది? మన లోకం మన శరీరంలో, మనసులో ఉంది. 
+
+Optimized:
+మరి మన లోకం ఎక్కడుంది? అది మన శరీరంలో, మనసులో ఉంది. 
+
+Description :
+Here there is no gesture issue, but the length is shortened to fit into the English video.
+
+
+
+
+
+Example 5
+
+
+English :
+People when they wake up in the morning …  do they say Shiva? No - they'll say <Gesture>stock market</Gesture> … they will say <Gesture>cinema</Gesture>.
+
+Telugu :
+జనం పొద్దున లేవగానే, శివా అంటారా? లేదు - వారు <Gesture>స్టాక్ మార్కెట్, సినిమా</Gesture> అంటారు.
+
+Optimized:
+ప్రజలు పొద్దున లేవగానే …  ‘శివా’ అంటారా? లేదు - <Gesture>‘స్టాక్ మార్కెట్</Gesture>’ అంటారు …  <Gesture> ‘సినిమా’</Gesture> అంటారు.
+
+Description :
+Here the gesture phrases came in two clauses, so we optimised the sentence also to contain two clauses - each with corresponding gestures phrase.
+
+
+
+
+
+Example 6
+
+
+English :
+So, it's important - that - there is an experience of <Gesture>exuberance, joy, profoundness.</Gesture>
+
+
+Telugu :
+కాబట్టి, <Gesture>ఉల్లాసం, ఆనందం, గాఢత</Gesture> యొక్క అనుభవం ఉండటం ముఖ్యం.
+
+Optimized:
+కాబట్టి ఇది ముఖ్యం -  అదేంటంటే, వీటిని అనుభూతి చెందాలి - <Gesture>ఉల్లాసం, ఆనందం ఇంకా ప్రగాఢతలను!</Gesture>
+
+
+Description :
+Here the gesture phrase came at the end of the dialogue. So we have first introduced the concept with a pronoun and then brought the actual nouns in the second half. Thus able to put the idea across, at the same time maintain the position of the gesture phrase.
+
+
+
+
+
+Example 7
+
+
+English :
+Sadhguru... if the creation is perfect and the creator has done such a good job on us - as you say; why is there so much suffering in the world? 
+
+Telugu :
+సద్గురు... సృష్టి పరిపూర్ణమైందైతే, సృష్టికర్త మనల్ని ఇంత అద్భుతంగా చేసి ఉంటే, మీరు చెప్పినట్టు; ఈ ప్రపంచంలో ఇంత బాధ ఎందుకుంది?
+
+Optimized:
+సద్గురు... మీరు చెప్పినట్టు - సృష్టి పరిపూర్ణమైందైతే, సృష్టికర్త మనల్ని ఇంత అద్భుతంగా చేసి ఉంటే, ఈ ప్రపంచంలో ఇంత బాధ ఎందుకుంది? 
+
+
+Description :
+Now here, there is no gesture in the sentence. And to maintain the same sequence of information, the telugu sentence is written in a bit unnatural way. Here what we have done is, we made it more natural telugu flow - as there is no restriction of gesture. At the same time me maintained the same length of the dialogue and the same pauses and segments structure.
+
+
+
+
+
+Example 8
+
+
+English :
+His mother asked, "Luke, did you really find it? … <Gesture>Are you sure?</Gesture>"
+
+Telugu :
+వాళ్ళ అమ్మ, "లూక్, అది నీకు నిజంగా దొరికిందా? <Gesture>నిజమేనా?</Gesture>" అని అడిగింది. 
+
+Optimized:
+వాళ్ళ అమ్మ, "లూక్, అది నీకు నిజంగా దొరికిందా? … <Gesture>నిజమేనా?</Gesture>" అని అడిగింది. 
+
+Description :
+Here, there is a pause before the gesture phrase. So we add the pause before the gesture phrase in the optimized version also. Otherwise the gesture phrase will come before the actual gesture in the video.
+
+
+
+
+
+Example 9
+
+
+English :
+That's not creation's fault; just gave you the freedom so that you could<Gesture> go beyond</Gesture>.
+
+Telugu :
+అది సృష్టి తప్పు కాదు; మీరు దాన్ని <Gesture>దాటి వెళ్లగలరనే</Gesture>, అది మీకు స్వేచ్ఛనిచ్చింది.
+
+Optimized:
+అది సృష్టి తప్పు కాదు; సృష్టి మీకు స్వేచ్ఛనిచ్చిందంతే - మీరు దాన్ని <Gesture>దాటి వెళ్లగలిగేలా</Gesture>!
+
+Description :
+Here the gesture came at the third segment of the dialogue. So we also optimized the sentence in such a way the corresponding gesture phrase comes in the third segment or third meaningful chunk. In such a way the gesture and the phrase comes at the same time.
+
+
+
+
+
+Example 10
+
+
+English :
+I don't know if you're aware of this Luke, you came early
+
+Telugu :
+లూక్, నీకు ఈ విషయం తెలుసో లేదో, నువ్వు చిన్నప్పుడే వచ్చావు.
+
+Optimized:
+లూక్, నీకిది తెలుసో లేదో, నువ్వు చిన్న వయసులోనే వచ్చావు.
+
+Description :
+Sadhguru spoke very fast here, so shortened the sentence to fit in the video
+
+
+
+
+
+Example 11
+
+
+English :
+Whoever talks to you, they say, 'how are you?' 'Hey, do you know about this galaxy which is a<Gesture> trillion light years away</Gesture>, which is BB whatever?' and you talk about it.
+
+Telugu :
+మీతో ఎవరు మాట్లాడినా, వాళ్ళు, ‘ఎలా ఉన్నారు?’ అనగానే, ‘హే, మీకు తెలుసా, <Gesture>కొన్ని కోట్ల కాంతి సంవత్సరాల దూరంలో ఒక గెలాక్సీ ఉంది</Gesture>, దాని పేరు బీబీ ఏదో ఒకటి?’ అని దాని గురించి మీరు మాట్లాడతారు; 
+
+Optimized:
+మీతో ఎవరు మాట్లాడినా, ‘ఎలా ఉన్నావ్?’ అనగానే, ‘హే, నీకీ గెలాక్సీ గురించి తెలుసా -<Gesture> కొన్ని కోట్ల కాంతి సంవత్సరాల దూరంలోనిది</Gesture>, పలానా ‘బీబీ..‘ పేరు గలది!’ ..  అని దాని గురించి మాట్లాడతారు.
+
+Description :
+Here the relative position of the gesture phrase is good enough in the initial telugu version. But the length is more. So the gesture phrase will come after the actual gesture happens in the video. For this we optimized the length , so that the gesture phrase and the gesture in the video comes at the same time.
+
+
+
+
+
+Example 12
+
+
+English :
+those days people had to set up manufacturing, <Gesture>this and that</Gesture> and make money which would take decades or generations. 
+
+Telugu :
+ఆ... ఆ రోజుల్లో ప్రజలు <Gesture>అదో, ఇదో</Gesture> తయారు చేసే పరిశ్రమలను స్థాపించాలి, డబ్బు సంపాదించాలి, దానికి దశాబ్దాలు లేదా తరాలు పట్టేది. 
+
+
+Optimized:
+ఆ రోజుల్లో ప్రజలు పరిశ్రమలను స్థాపించి <Gesture>ఇదో, అదో</Gesture> తయారు చేసి డబ్బు సంపాదించాలి, దానికి దశాబ్దాలు లేదా తరాలు పట్టేది. 
+
+
+Description :
+Moved the gesture phrase to the middle of the dialogue, as the gesture is occurring at the middle of the dialogue. At the same time reframed the dialogue segments or meaningful chunks in such a way the whole dialogue conveys the same idea and the same details - and matching the gesture too.
+
+
+
+Output:
+Now as per the above, you identify where you can optimize the below script and optimize the script. Now in the result, Bold the gesture phrases. Bold will be easier for us to identify, rather than tags. So no tags in the result, instead just bold those phrases.
+
+
+   
+Attaching the audio file, so that you can make use of the non verbal ques like tone, stress, pace, modulation etc to grasp the speaker actual intention beyond just the words.
+
+Note:
+If the source script is in tamil instead of english still the result should be in telugu. It is just that in this case we are translating from Tamil to Telugu.
+
+
+Below is the English Script with gesture tags  that needs Translation:
+
+
+</script>
+  <script type="text/plain" id="prompt5">Fine Tuning Needed Sentences:
+
+    Instructions for Fine Tuning:
+    
+    Below is the Transcript of an English Talk by sadhguru addressing Audience.
+    The talk is made up of blocks of points.
+    Each point is made up of blocks of thoughts.
+    Each thought is made up of blocks of information.
+    
+  We have used … , ; - . and ? to mark the boundaries of Information blocks, thoughts and ideas.
+  
+  … indicates a pause in between the sentences.
+  , indicates a pause between meaningful chunks that make up the sentence.
+  ; indicates connected sentences.
+  - indicates additional information related to the main idea of the sentence.
+  
+  
+  I am also giving the telugu translation for the same.Now in the telugu translation I have added some tags.
+  <Gesture> </Gesture> indicates the portion of the sentences for which there is a corresponding significant body language shown in the video.
+  
+  <Context> </Context> indicates the portion of the sentences for which i am looking for a more contextual word or phrase. 
+  
+  <Intention> </Intention> indicates the portion of the sentences for which i am looking for a sentence that expresses the actual intent behind using that sentence or words.
+  
+  Below are the instructions for the the tag <Context> </Context>:
+  Assume you are very good at telugu language, basically good at finding the right telugu words for a particular english word based on the context in which the word occurs. you also explain what this word is conveying here in this context in English.
+  
+  
+  
+  Below are the instructions for the the tag <Intention> </Intention>:
+  
+  Based on the context in which this sentence is occurring, and based on the picture that is being created before and after this sentence, identify the intention of the speaker. what he actually is trying to convey. Rather than just relying on the words and doing the word to word translation, grasp the intention based on the context and express it directly in telugu in a colloquial way. No need to follow the exact word to word based translation. The intention needs to be expressed here.
+  
+  
+  
+  Below i am giving some Examples of identifying the intention:
+  Example 1
+  
+  
+  English:
+  love is not profitable.
+  It’s a… a very conscious, <Intention>loss making venture</Intention>; 
+  
+  Telugu:
+  ప్రేమ లాభ పడేందుకు కాదు
+  అది స్పృహతో, <Intention>నష్ట పోయేందుకు చేసే ప్రయత్నం</Intention>
+  
+  Optimized:
+  ప్రేమ లాభసాటి కాదు
+  అది - <Intention>నష్టం తెచ్చేదని తెలిసి కూడా</Intention> కోరునే విషయం
+  
+  Description:
+  Here the effort is not to make a loss. 
+  He is saying its nature is ‘loss making’, and still we choose it consciously.
+  
+  
+  
+  
+  
+  
+  
+  Example 2
+  
+  
+  English:
+  30 times the idiot shoots at you and misses you; I am so glad; I hope <Intention>they </Intention>keep missing like that.
+  
+  Telugu:
+  <Intention>వాడలా </Intention>గురి తప్పాలనే కోరుకుంటున్నాను.
+  
+  Optimized:
+  <Intention>వాళ్ళలానే </Intention>గురి తప్పాలని కోరుకుంటున్నాను.
+  
+  Description:
+  Here sadhguru is not speaking about that single person who missed.
+  He is speaking about the enemies  in general. So we made it into  plural 
+  
+  
+  
+  
+  Example 3
+  
+  
+  English:
+  Yes sir, because uh… he is always wide open and waiting; it's the people who are <Intention>far away, in their own world.</Intention>
+  
+  
+  Telugu:
+  ఉన్నాయండి, కానీ, ఆయనెప్పుడూ చేతులు చాపి, ఎదురుచూస్తూనే ఉన్నాడు; మనుషులే <Intention>చాలా దూరంగా, తమ లోకంలో ఉన్నారు.</Intention>
+  
+  Optimized:
+  ఉన్నాయండి! 
+  ఎందుకంటే ..  ఆయనెప్పుడూ చేతులు చాపి, ఎదురుచూస్తూనే ఉన్నాడు; మనుషులే <Intention>చాలా దూరంగా ఉన్నారు … తమ సొంత లోకంలో!</Intention>
+  
+  Description:
+  Here we just made it into two clauses. As it is expressed as two details in English. 
+  
+  
+  
+  
+  Example 4
+  
+  
+  English:
+  "I do my Om Namo Shivaya jap <Intention>and everything</Intention>,
+  
+  Telugu:
+  ఓం నమః శివాయ’’ <Intention>జపం లాంటివన్నీ</Intention> చేస్తాను
+  
+  Optimized:
+  ఓం నమః శివాయ’’ <Intention>జపం మొదలైనవన్నీ</Intention> చేస్తాను
+  
+  Description:
+  Here he is not saying that he is doing things that are alike to jap 
+  He is saying he is doing jap and things like that.
+  
+  
+  
+  
+  Example 5
+  
+  
+  English:
+  You take some fenugreek, boil it, and the decoction that comes out of it, you mix honey with it and you can drink it. Lot of people drink it like coffee, but you need special kind of <Intention>taste buds</Intention> or you need tremendous acceptance. 
+  
+  Telugu:
+  మెంతులు ... మరిగించి... వడకట్టి... తేనె కలుపుకుని తాగొచ్చు; 
+  చాలామంది దాన్ని కాఫీ లాగా తాగుతారు, కానీ దానికి ఓ ప్రత్యేకమైన <Intention>నాలుక </Intention>ఉండాలి, లేదా చాలా సహనం ఉండాలి. 
+  
+  
+  Optimized:
+  అలా తాగడాలంటే ఓ ప్రత్యేకమైన <Intention>అభిరుచి </Intention>ఉండాలి
+  
+  Description:
+  Here he is not talking about the tongue literally, he is speaking about their preference and patience to take such coffee.
+  
+  
+  
+  
+  Example 6
+  
+  
+  English:
+  She said, "I hear that monks are looking for shelter in many homes; <Intention>why don't you come and stay in my house</Intention>?"
+  
+  Telugu:
+  ఆమె, "సన్యాసులు చాలా ఇళ్ళలో ఆశ్రయం కోసం చూస్తున్నారని విన్నాను; <Intention>నువ్వెందుకు నా ఇంట్లో ఉండకూడదు</Intention>?" అంది. 
+  
+  Optimized:
+  ఆమె, "సన్యాసులు చాలా ఇళ్ళలో ఆశ్రయం కోసం చూస్తున్నారని విన్నాను; నువ్వు  <Intention>వచ్చి నా ఇంట్లో ఉండొచ్చు కదా?</Intention>" అంది. 
+  
+  Description:
+  Here the translation was literal, like grammar based. 
+  But in telugu the intention is conveyed differently, not in the same grammar syntax to syntax translation.
+  
+  
+  
+  
+  Example 7
+  
+  
+  English:
+  Right now in the world, a whole lot of people think <Intention>only in misery you can be profound</Intention>;
+  
+  Telugu:
+  ప్రస్తుతం ప్రపంచంలో, చాలా మంది - <Intention>బాధను మాత్రమే తీవ్రంగా అనుభవించగలమని అనుకుంటారు</Intention>;
+  
+  Optimized:
+  ప్రస్తుతం ప్రపంచంలో, చాలా మంది - <Intention>కేవలం బాధలో మాత్రమే ప్రగాఢత అనుభూతి చెందగలమనుకుంటారు;</Intention>
+  
+  Description:
+  Here he is not talking about experiencing the pain profoundly. 
+  He is saying about how we will go to profound intensity when it comes to pain.
+  
+  
+  
+  
+  Example 8
+  
+  
+  English:
+  <Intention>Because</Intention> there is not much possibility, there is not much misery either.
+  
+  Telugu:
+  <Intention>ఎందుకంటే </Intention>అక్కడ పెద్దగా అవకాశాలు లేవు కాబట్టి; అంత బాధ కూడా ఉండదు.
+  
+  Optimized:
+  సంభావ్యతలు పెద్దగా లేవు <Intention>కాబట్టి</Intention>, బాధ కూడా అంతగా ఉండదు.
+  
+  Description:
+  Here he is conveying the point in cause and effect format. First he is telling the cause and then he is telling the effect.
+  So the because at the beginning here indicates that this is the cause. Not to literally place <Intention>ఎందుకంటే </Intention>at the begining in the telugu also.
+  
+  
+  
+  
+  Example 9
+  
+  
+  English:
+  You don't see other creatures of the planet suffering like human beings. Their suffering is purely physical. If they're physically harmed, <Intention>they are in pain. </Intention>
+  
+  Even in pain, they do not know the kind of suffering that a human being knows.
+  
+  
+  
+  Telugu:
+  ఈ భూమి మీద ఉన్న ఇతర జీవులు మనుషుల్లా బాధపడటం మీరు చూడరు. వాటి బాధ కేవలం శారీరకమైనది. వాటికి శారీరకంగా హాని జరిగితే, <Intention>అవి బాధ పడతాయి. </Intention>
+  
+  బాధ ఉన్నా కూడా, ఒక మనిషికి తెలిసినంత బాధ వాటికి తెలీదు.
+  
+  
+  
+  
+  Optimized:
+  ఈ భూమ్మీది ఇతర జీవులు మనుషులంతగా బాధపడటం మీరు చూడరు. వాటి బాధ కేవలం శారీరకమైనది. వాటికి శారీరకంగా హాని జరిగితే, <Intention>నొప్పికి గురవుతాయి.</Intention>
+  
+  నొప్పి విషయంలో కూడా, మనిషికి తెలిసినంతటి బాధ వాటికి తెలీదు.  
+  
+  
+  Description:
+  Here pain and suffering are different and he is using the word pain when he is referring to the physical pain. That is not caught in the translation. So we replaced బాధ పడతాయి with  నొప్పికి గురవుతాయి.
+  
+  
+  
+  
+  Example 10
+  
+  
+  English:
+  Human being knows this suffering<Intention> not because creation gave this suffering to you</Intention>; creation just gave you the freedom... to make whatever you wish to out of yourself.
+  
+  Telugu:
+  మనిషికి బాధ ఉంది - <Intention>కానీ దాన్ని మీకు ఇచ్చింది సృష్టి కాదు</Intention>; సృష్టి కేవలం మీకు స్వేచ్ఛ నిచ్చింది... మిమ్మల్ని మీరు ఎలా కావాలంటే అలా మలుచుకోవడానికి. 
+  
+  Optimized:
+  మనిషికి ఇంతటి బాధ తెలియడానికి కారణం - <Intention>సృష్టి ఆ బాధను మీకు ఇవ్వడం వల్ల కాదు</Intention> - సృష్టి మీకు స్వేచ్ఛని ఇచ్చింది - మిమ్మల్ని, మీకు ఎలా కావాలంటే అలా చేసుకునే స్వేచ్ఛనిచ్చింది! 
+  
+  Description:
+  Here he is not talking about whether it was given by creation or not. By using the phrase  ‘not because’ he is telling that it was not the cause.
+  
+  
+  
+  Example 11
+  
+  
+  English:
+  we do the same things what the other animals do; It is just that all that the animal can do; we do the same things but we can do it consciously -<Intention> that's a big difference.</Intention>
+  
+  Telugu:
+  జంతువులు చేసే పనులే మనం కూడా చేస్తాం; కాకపోతే ఏంటంటే, జంతువు చేయగలిగినదంతా మనం కూడా చేస్తాం -  కానీ దాన్ని మనం స్పృహతో చేయగలం - <Intention>అదే మనకి వాటికీ ఉన్న పెద్ద తేడా.</Intention>
+  
+  
+  
+  Optimized:
+  <Intention>అది చాలా పెద్ద తేడా!</Intention>
+  
+  
+  Description:
+  Here he is not talking about whether it is the big difference or not.
+  He is talking about how big a difference it is.
+  
+  
+  
+  Example 12
+  
+  
+  English:
+  <Intention>This is also a way, for me to demonstrate to people</Intention>; whatever life throws at us, it's not in our hands; what we make out of it is 100% in our hands. 
+  
+  
+  Telugu:
+  <Intention>ప్రజలకు చూపించడానికి ఇది కూడా ఒక మార్గం;</Intention> జీవితం మనపై ఏది వేస్తారనేది, అది మన చేతుల్లో లేదు; దాన్ని మనం ఎలా మలచుకుంటామనేది 100% మన చేతుల్లోనే ఉంటుంది.
+  
+  
+  
+  Optimized:
+  <Intention>ఇది ప్రజలకు ఆచరణాత్మకంగా చూపించేందుకు ఒక మార్గం కూడా</Intention>; అదేంటంటే - జీవితం మనపై ఏం విసురుతుందనేది మన చేతుల్లో ఉండదు; అయితే దాన్ని మనం ఎలా మలచుకుంటామనేది 100% మన చేతుల్లోనే ఉంటుంది.
+  
+  
+  
+  Description:
+  Here he is not telling that this is also a one more way to demonstrate to people.
+  He is telling that, apart from other purposes that it serves, it also acts a way to demonstrate to people.
+  
+  
+  
+  Example 13
+  
+  
+  English:
+  That is true; that is true. Uh, yeah, yeah, <Intention>you can never be cautious enough</Intention>, but I think, uh, you've just proven that if you keep your head about you, uh, all the time this is possible.
+  
+  Telugu:
+  అది నిజం; అది నిజం. ఆఁ, అవునవును, <Intention>మనం ఎప్పటికీ తగినంత జాగ్రత్తగా ఉండలేం</Intention>, కానీ,  మీ బుర్ర మీ దగ్గరే పెట్టుకుంటే,  అన్ని వేళలా ఇది సాధ్యమేనని మీరు నిరూపించారనుకుంటున్నాను.
+  
+  Optimized:
+  అది నిజం; అది నిజం. ఆఁ, అవునవును, <Intention>ఎంత శ్రద్ధ పెట్టినా అది సరిపోదు</Intention>; కానీ మీరిది నిరూపించారనుకుంటున్నాను - అప్రమత్తతో ఉంటే,  అన్ని వేళలా ఇది సాధ్యమేనని!
+  
+  Description:
+  It is translated literally. 
+  It is about whether we can be cautious or not. His intention is that we have to be very cautious as much as possible.
+  
+  
+  
+  
+  
+  
+  Example 14
+  
+  
+  English:
+  because, uh, <Intention>the altitude was not like this</Intention>, but, uh, the weather, was even worse than this actually, in many ways. 
+  
+  
+  Telugu:
+  ఎందుకంటే - <Intention>అక్కడ ఎత్తు ఇలా లేదు</Intention>; కానీ, వాతావరణం మాత్రం, నిజానికి చాలా విధాలుగా దీనికంటే దారుణంగా ఉంది.
+  
+  Optimized:
+  ఎందుకంటే -<Intention> అది ఇంత ఎత్తైన ప్రదేశం కాదు</Intention> - కానీ, వాతావరణం మాత్రం, నిజానికి చాలా విధాలుగా దీనికంటే దారుణంగా ఉంది.
+  
+  
+  Description:
+  Here the translation is literal.
+  While he used altitude as a subject here, in reality he was comparing the height of the place. So we wrote the actual intention instead of just literal translation.
+  
+  
+  
+  Example 15
+  
+  
+  English:
+  <Intention>Such a</Intention> lovely idea Guruji.
+  
+  Telugu:
+  <Intention>అలాంటి </Intention>ఒక చక్కని ఆలోచన గురూజీ
+  
+  Optimized:
+  <Intention>భలే </Intention>చక్కని ఆలోచన గురూజీ
+  
+  Description:
+  Here the translation is literal. To convey the actual intention, literal word to word translation wont do justice. So first I grasped the intention, then I directly expressed that intention in Telugu - without referring to the words used in English.
+  
+  
+  
+  
+  
+  Example 16
+  
+  
+  English:
+  Everything that we are right now - every breath that we take, every experience that we go through is <Intention>only valuable, because</Intention> we are on a limited lease of time;
+  
+  Telugu:
+  మనమిప్పుడున్న ప్రతిదీ - మనం తీసుకునే ప్రతి శ్వాస, మనం పొందే ప్రతి అనుభవం కేవలం<Intention> విలువైనదే, ఎందుకంటే </Intention>మనం పరిమిత కాలపు గడువుపై ఉన్నాం;
+  
+  
+  Optimized:
+  ప్రస్తుతం మనకు సంబంధించిన ప్రతిదీ - తీసుకునే ప్రతీ శ్వాసా,  పొందే ప్రతీ అనుభవం <Intention>విలువైనవి కావడానికి కారణం - మన సమయం పరిమితం కాబట్టే! </Intention>
+  
+  Description:
+  Here by using the combination of words, only and because, he is establishing a cause and effect. So we have optimised the translation also into a cause and effect format.
+  
+  
+  Below are the instructions for the the tag <Gesture> </Gesture>:
+  Nothing to do actually, just not that these phrases correspond to the gestures in the video.
+  
+  
+  Now give the output in the below format:
+  
+  For Each <Context> tag:
+  
+  Give the actual tagged word/Phrase as heading (no need to mention the tag itself). (No heading needed for points 2,3,4) Give the best contextual Telugu word/Phrase.
+  Explain what this Word is conveying here in this context in English.
+  Also give 6 more closer words in addition to the best word.
+  
+  
+  
+  Example Output:
+  అంకితమైన
+  అధిదేవత 
+  The word "అంకితమైన" translates to "dedicated to." While grammatically correct, it is a general term. In this specific context, Sadhguru is referring to Dhanvantri as the deity who presides over health and well-being. The Telugu word "అధిదేవత" more accurately conveys this idea of a "presiding deity" or the specific godhead responsible for a particular domain, making it a richer and more precise choice.
+  ప్రతీకమైన - symbolic of
+  కారకుడైన - the causal one for
+  అధిపతి అయిన - the lord of
+  ప్రసాదించే - the one who bestows
+  సంరక్షకుడైన - the protector of
+  బాధ్యత వహించే - the one responsible for
+  
+  
+  
+  
+  For Each <Intention> tag:
+  
+  Give the actual tagged Word/Phrase/Sentence as heading (no need to mention the tag itself). (No heading needed for points 2,3,4)
+  Give the Word/Phrase/Sentence that actually expresses the intention of the speaker in natural Colloquial Telugu flow
+  Give another alternative which expresses the intention, but at the same time follows the sentence structure like length, number of clauses or meaningful chunks, number of segments in the sentence with gaps between them etc.
+  Give a third alternative assuming that this tagged position is absent or lost and you have to bridge the gap based on the context that is going on and based on the previous sentences and the later sentences.
+  
+  
+  
+  Example output:
+  మీరు మీ జీవసంబంధమైన ప్రవృత్తులను అధిగమించి ఉండాలి
+  మీరు మీ జీవసంబంధమైన ప్రవృత్తులను అధిగమించారనేది నా ఉద్దేశం...
+  మీరు మీ జీవసంబంధమైన ప్రవృత్తులను అధిగమించి ఉంటారని నేను భావిస్తున్నాను...
+  ఎందుకంటే మనుషులుగా మనం ఆ పరిమితులను దాటగలం...
+  
+  
+  Give the results in the same order in which the tags appear in the script.
+  
+  Below are the English and Telugu scripts.
+</script>
+  
+
+  
+
+<script>
+  // All your existing JS logic remains unchanged from the original file
+  // Only UI grouping changes added below
+
+  const message = document.getElementById('message');
+  let Punctuated_Transcript = "";
+  let Gemini_Translation = "";
+
+  const descriptions = {
+    1: "Copy Prompt → Paste in Gemini AI → Add Audio file from Drive → Run the prompt",
+    2: "Paste result from previous step → Copy Prompt → Paste in ChatGPT → Run the prompt",
+    3: "Paste result from previous step → Copy Prompt → Paste in ChatGPT → Run the prompt",
+    4: "Paste result from previous step → Copy Prompt → Paste in Gemini AI → Run the prompt",
+    5: "Paste result from previous step → Copy Prompt → Paste in Gemini AI → Run the prompt"
+  };
+
+  const results = {
+    1: "Transcription with pauses marked with '...'",
+    2: "Transcription with modulation punctuation marks",
+    3: "Transcription with modulation punctuation marks",
+    4: "Final Translation with small paragraphs that hint modulation changes",
+    5: "Fine-tuned translation with tags"
+  };
+
+  const stepNames = {
+    1: "Gemini 2.5 Pro 🎙",
+    2: "chatGPT 4.1",
+    3: "chatGPT 4.1", 
+    4: "Gemini 2.5 Pro",
+    5: "Gemini 2.5 Pro"
+  };
+
+  const aiNames = {
+    1: "Audio Transcription",
+    2: "Add Punctuation-A",
+    3: "Add Punctuation-B",
+    4: "Final Polish",
+    5: "Fine Tuning"
+  };
+  
+  // ================== FIX 1: ADD THE MISSING getPrompt FUNCTION ==================
+  function getPrompt(step) {
+    const promptElement = document.getElementById(`prompt${step}`);
+    if (promptElement) {
+      return promptElement.textContent.trim();
+    }
+    console.error(`Prompt for step ${step} not found!`);
+    return ""; // Return empty string if prompt is not found
+  }
+  // ==============================================================================
+
+
+  // ================== FIX 2: USE THE CORRECT, SINGLE handlePaste FUNCTION ==================
+ // REPLACE THE OLD handlePaste FUNCTION WITH THIS
+
+function handlePaste(step, boxNumber = 1) {
+    navigator.clipboard.read().then(items => {
+        let foundHtml = false;
+        for (const item of items) {
+            if (item.types.includes('text/html')) {
+                item.getType('text/html').then(blob => {
+                    blob.text().then(html => {
+                        let targetBox;
+                        if (step === 5) {
+                            targetBox = document.getElementById(`input5_${boxNumber}`);
+                        } else {
+                            targetBox = document.getElementById(`input${step}_1`);
+                        }
+
+                        if (targetBox) {
+                            targetBox.innerHTML = html;
+                            showMessage(`✅ Pasted rich text into Step ${step}, Box ${boxNumber}`);
+                        }
+                    });
+                });
+                foundHtml = true;
+                break;
+            }
+        }
+        if (!foundHtml) {
+            navigator.clipboard.readText().then(text => {
+                let targetBox;
+                if (step === 5) {
+                    targetBox = document.getElementById(`input5_${boxNumber}`);
+                } else if (step === 4) {
+                     targetBox = document.getElementById(`input4_1`);
+                } else {
+                    targetBox = document.getElementById(`input${step}`);
+                }
+                
+                if (targetBox) {
+                   if(targetBox.nodeName === "TEXTAREA") {
+                     targetBox.value = text;
+                   } else {
+                     targetBox.innerText = text;
+                   }
+                   showMessage(`✅ Pasted plain text into Step ${step}`);
+                }
+            });
+        }
+    }).catch(err => {
+        console.error('Failed to read clipboard contents: ', err);
+        showMessage("❌ Could not paste from clipboard.");
+    });
+}
+  // ======================================================================================
+
+  
+// REPLACE YOUR OLD clearAllInputs FUNCTION WITH THIS
+
+// --- ADD THESE TWO FUNCTIONS BACK INTO YOUR SCRIPT ---
+
+function handleClear(step) {
+  if (step === 4) {
+    // Logic for Step 9
+    const box1 = document.getElementById(`input4_1`);
+    const box2 = document.getElementById(`input4_2`);
+    if (box1) box1.innerHTML = "";
+    if (box2) box2.value = "";
+  } else if (step === 5) {
+    // Logic for Step 5
+    const box1 = document.getElementById(`input10_1`);
+    const box2 = document.getElementById(`input10_2`);
+    if (box1) box1.innerHTML = "";
+    if (box2) box2.innerHTML = "";
+  } else {
+    // Standard handling for all other steps
+    const box = document.getElementById(`input${step}`);
+    if (box) box.value = "";
+  }
+  showMessage("🗑️ Cleared Step " + step);
+}
+
+function clearAllInputs() {
+  // Loop through all 10 steps
+  for (let i = 1; i <= 5; i++) {
+    if (i === 9) {
+      // Special logic for Step 9 (div + textarea)
+      const box1 = document.getElementById(`input9_1`);
+      const box2 = document.getElementById(`input9_2`);
+      if (box1) box1.innerHTML = "";
+      if (box2) box2.value = "";
+    } else if (i === 5) {
+      // Special logic for Step 10 (div + div)
+      const box1 = document.getElementById(`input10_1`);
+      const box2 = document.getElementById(`input10_2`);
+      if (box1) box1.innerHTML = "";
+      if (box2) box2.innerHTML = "";
+    } else {
+      // Handle standard textareas for other steps
+      const inputBox = document.getElementById(`input${i}`);
+      if (inputBox) {
+        inputBox.value = "";
+      }
+    }
+  }
+
+  // Clear the separate highlighter tools
+  const highlighterBox = document.getElementById('highlight-box');
+  if (highlighterBox) {
+    highlighterBox.innerHTML = '';
+  }
+
+  const dualHighlighterBox = document.getElementById('dual-highlight-box');
+  if (dualHighlighterBox) {
+    dualHighlighterBox.innerHTML = '';
+  }
+
+  showMessage("🗑️ All input boxes cleared");
+}
+
+
+  function copyFollowUp(step) {
+    let text = "";
+    if (step === 1) {
+      text = "Have you carefully considered the length of the pauses and placed the ... accordingly?";
+    }
+    navigator.clipboard.writeText(text);
+    showMessage("💬 Follow-up prompt copied!");
+  }
+
+  // REPLACE THE OLD handleCopy FUNCTION WITH THIS
+
+function handleCopy(step) {
+    let finalText = "";
+
+    if (step === 4) {
+      // Special case for Step 9
+      const inputBox1 = document.getElementById(`input${step}_1`);
+      const inputBox2 = document.getElementById(`input${step}_2`);
+      const text1 = inputBox1 ? inputBox1.innerText.trim() : ""; 
+      const text2 = inputBox2 ? inputBox2.value.trim() : "";
+      finalText =
+        getPrompt(step) +
+        "\n\nPunctuated English Script:\n" +
+        text1 +
+        "\n\nTelugu Translation that need to be optimized:\n" +
+        text2;
+    } else if (step === 5) {
+      // --- UPDATED: Special case for Step 10 ---
+      const inputBox1 = document.getElementById(`input${step}_1`); // The div
+      const inputBox2 = document.getElementById(`input${step}_2`); // The textarea
+      const text1 = inputBox1 ? inputBox1.innerText.trim() : ""; // Use .innerText for the div
+      const text2 = inputBox2 ? inputBox2.value.trim() : "";   // Use .value for the textarea
+      finalText =
+        getPrompt(step) +
+        "\n\nEnglish Script:\n" +
+        text1 +
+        "\n\nTagged Telugu Script:\n" +
+        text2;
+    } else if (step === 6) {
+      // Logic for Step 6
+      const inputBox = document.getElementById(`input${step}`);
+      const userInput = inputBox ? inputBox.value.trim() : "";
+      finalText =
+        getPrompt(step) +
+        "\n\nGemini Translation:\n" +
+        Gemini_Translation +
+        "\n\nClaude Translation:\n" +
+        userInput;
+    } else if (step === 7) {
+      // Logic for Step 7
+      const inputBox = document.getElementById(`input${step}`);
+      const userInput = inputBox ? inputBox.value.trim() : "";
+      finalText =
+        getPrompt(step) +
+        "\n\nEnglish Script:\n" +
+        Punctuated_Transcript +
+        "\n\nScript to be optimized:\n" +
+        userInput;
+    } else if (step === 8) {
+      // Logic for Step 8
+      const inputBox = document.getElementById(`input${step}`);
+      const userInput = inputBox ? inputBox.value.trim() : "";
+      finalText =
+        getPrompt(step) +
+        "\n\nEnglish Script:\n" +
+        Punctuated_Transcript +
+        "\n\nTelugu Script:\n" +
+        userInput;
+    } else {
+      // Standard handling for all other steps
+      const inputBox = document.getElementById(`input${step}`);
+      const userInput = inputBox ? inputBox.value.trim() : "";
+      finalText = getPrompt(step) + "\n" + userInput;
+    }
+
+    navigator.clipboard.writeText(finalText).then(() => {
+      showMessage("📋 Prompt copied from Step " + step);
+    });
+
+    if (step === 4) Punctuated_Transcript = document.getElementById("input4").value.trim();
+    if (step === 5) Gemini_Translation = document.getElementById("input5").value.trim();
+  }
+
+  function showMessage(msg) {
+    message.textContent = msg;
+    message.classList.add('show');
+    clearTimeout(showMessage.timeout);
+    showMessage.timeout = setTimeout(() => {
+      message.classList.remove('show');
+    }, 3000);
+  }
+  
+  // This is the updated function from the previous step
+  function wrapBoldWithGesture(step) {
+  const editableDiv = document.getElementById(`input${step}_1`);
+  if (!editableDiv) {
+    showMessage("⚠️ No editable field found for Step " + step);
+    return;
+  }
+
+  // Get the raw HTML content from the editable div
+  let html = editableDiv.innerHTML;
+  
+  // Step 1: Convert all types of bold tags to temporary markers.
+  html = html.replace(/<span\b[^>]*font-weight:\s*(?:bold|700|800|900)[^>]*>(.*?)<\/span>/gi, '§§START§§$1§§END§§');
+  html = html.replace(/<b\b[^>]*>(.*?)<\/b>/gi, '§§START§§$1§§END§§');
+  html = html.replace(/<strong\b[^>]*>(.*?)<\/strong>/gi, '§§START§§$1§§END§§');
+  
+  // Step 2: Convert HTML line breaks and block elements to plain text newlines.
+  html = html.replace(/<br\s*\/?>/gi, '\n');
+  html = html.replace(/<\/p>\s*<p[^>]*>/gi, '\n\n');
+  html = html.replace(/<p[^>]*>/gi, '');
+  html = html.replace(/<\/p>/gi, '\n\n');
+  html = html.replace(/<\/div>\s*<div[^>]*>/gi, '\n');
+  html = html.replace(/<div[^>]*>/gi, '');
+  html = html.replace(/<\/div>/gi, '\n');
+  
+  // Step 3: Use a temporary element to strip any remaining HTML and get a clean text representation.
+  const tempDiv = document.createElement('div');
+  tempDiv.innerHTML = html;
+  let textContent = tempDiv.textContent || tempDiv.innerText;
+  
+  // --- START OF NEW LOGIC ---
+  // Step 4: Merge consecutive bold sections.
+  // This finds an END marker, followed by whitespace, followed by a START marker,
+  // and replaces the whole thing with just the whitespace, effectively merging the sections.
+  // The (\s+) captures the whitespace so we can preserve it in the replacement '$1'.
+  textContent = textContent.replace(/§§END§§(\s+)§§START§§/g, '$1');
+  // --- END OF NEW LOGIC ---
+
+  // Step 5: Replace the final (now potentially merged) markers with the <gesture> tags.
+  textContent = textContent.replace(/§§START§§(.*?)§§END§§/g, '<gesture>$1</gesture>');
+  
+  // Step 6: Clean up any excessive newlines.
+  textContent = textContent.replace(/\n{3,}/g, '\n\n');
+  
+  // Step 7: Update the editable div with the final plain text result.
+  editableDiv.innerText = textContent.trim();
+  
+  showMessage("✨ Converted and merged bold words to <gesture> tags!");
+}
+// --- ADD THIS NEW FUNCTION ---
+
+function transformStep10() {
+  const editableDiv = document.getElementById('input5_1');
+  if (!editableDiv) {
+    showMessage("⚠️ No editable field found for Step 5");
+    return;
+  }
+
+  let html = editableDiv.innerHTML;
+
+  // --- Step 1: Replace Italic tags with <intention> markers ---
+  // We use temporary, unique markers to handle nested or complex formatting.
+  // Regex for <i> and <em> tags
+  html = html.replace(/<(i|em)\b[^>]*>(.*?)<\/\1>/gi, '§§I_START§§$2§§I_END§§');
+  // Regex for spans styled with font-style: italic
+  html = html.replace(/<span\b[^>]*font-style:\s*italic[^>]*>(.*?)<\/span>/gi, '§§I_START§§$1§§I_END§§');
+
+  // --- Step 2: Replace Bold tags with <context> markers ---
+  // Regex for <b> and <strong> tags
+  html = html.replace(/<(b|strong)\b[^>]*>(.*?)<\/\1>/gi, '§§C_START§§$2§§C_END§§');
+  // Regex for spans styled with font-weight: bold
+  html = html.replace(/<span\b[^>]*font-weight:\s*(?:bold|700|800|900)[^>]*>(.*?)<\/span>/gi, '§§C_START§§$1§§C_END§§');
+
+  // --- Step 3: Clean up the HTML structure to get plain text ---
+  // This is the same cleaning logic used in the Step 9 function.
+  html = html.replace(/<br\s*\/?>/gi, '\n');
+  html = html.replace(/<\/p>\s*<p[^>]*>/gi, '\n\n');
+  html = html.replace(/<p[^>]*>/gi, '');
+  html = html.replace(/<\/p>/gi, '\n\n');
+  html = html.replace(/<\/div>\s*<div[^>]*>/gi, '\n');
+  html = html.replace(/<div[^>]*>/gi, '');
+  html = html.replace(/<\/div>/gi, '\n');
+  
+  const tempDiv = document.createElement('div');
+  tempDiv.innerHTML = html;
+  let textContent = tempDiv.textContent || tempDiv.innerText;
+
+  // --- Step 4: Replace the markers with the final target tags ---
+  textContent = textContent.replace(/§§I_START§§(.*?)§§I_END§§/g, '<intention>$1</intention>');
+  textContent = textContent.replace(/§§C_START§§(.*?)§§C_END§§/g, '<context>$1</context>');
+
+  // --- Step 5: Clean up any excessive newlines and update the div ---
+  textContent = textContent.replace(/\n{3,}/g, '\n\n');
+  editableDiv.innerText = textContent.trim(); // Using .innerText ensures it's set as plain text
+
+  showMessage("✨ Converted bold to <context> and italic to <intention>!");
+}
+// --- ADD THIS NEW FUNCTION ---
+
+// REPLACE THE OLD transformTeluguTags FUNCTION WITH THIS
+// REPLACE THE ENTIRE transformTeluguTags FUNCTION WITH THIS CORRECTED VERSION
+
+function transformTeluguTags() {
+  // Target the second contenteditable div in Step 10
+  const editableDiv = document.getElementById('input5_2');
+  if (!editableDiv) {
+    showMessage("⚠️ No editable field found for Step 5 Box 2");
+    return;
+  }
+
+  let html = editableDiv.innerHTML;
+
+  // --- Step 1: Replace formatting with temporary, non-HTML markers ---
+  // This prevents them from being stripped out in the next step.
+
+  // Replace Italic tags with <intention> markers
+  html = html.replace(/<(i|em)\b[^>]*>(.*?)<\/\1>/gi, '§§I_START§§$2§§I_END§§');
+  html = html.replace(/<span\b[^>]*font-style:\s*italic[^>]*>(.*?)<\/span>/gi, '§§I_START§§$1§§I_END§§');
+
+  // Replace Bold tags with <context> markers
+  html = html.replace(/<(b|strong)\b[^>]*>(.*?)<\/\1>/gi, '§§C_START§§$2§§C_END§§');
+  html = html.replace(/<span\b[^>]*font-weight:\s*(?:bold|700|800|900)[^>]*>(.*?)<\/span>/gi, '§§C_START§§$1§§C_END§§');
+
+  // --- Step 2: Clean up all remaining HTML to get plain text with our markers ---
+  const tempDiv = document.createElement('div');
+  tempDiv.innerHTML = html;
+  let textContent = tempDiv.textContent || tempDiv.innerText;
+
+  // --- Step 3: Replace the markers with the final, visible tags ---
+  // The 'g' flag is crucial to replace all occurrences.
+  textContent = textContent.replace(/§§I_START§§/g, '<intention>').replace(/§§I_END§§/g, '</intention>');
+  textContent = textContent.replace(/§§C_START§§/g, '<context>').replace(/§§C_END§§/g, '</context>');
+
+  // --- Step 4: Update the div with the final tagged text ---
+  // We use .innerText to ensure the tags are displayed as text, not rendered as HTML.
+  editableDiv.innerText = textContent.trim();
+
+  showMessage("✨ Applied tags to Telugu script!");
+}
+// ADD THESE THREE NEW FUNCTIONS
+
+// --- Highlighter Tool Functions ---
+
+function pasteIntoHighlighter() {
+  const box = document.getElementById('highlight-box');
+  if (box) {
+    box.focus();
+    // Use the modern clipboard API to attempt pasting rich text (HTML)
+    navigator.clipboard.read().then(items => {
+      let foundHtml = false;
+      for (const item of items) {
+        if (item.types.includes('text/html')) {
+          item.getType('text/html').then(blob => {
+             blob.text().then(html => {
+               box.innerHTML = html;
+               showMessage('✅ Pasted rich text into highlighter!');
+             });
+          });
+          foundHtml = true;
+          break;
+        }
+      }
+      if (!foundHtml) {
+        // Fallback to plain text if no HTML is on the clipboard
+        navigator.clipboard.readText().then(text => {
+          box.innerText = text;
+          showMessage('✅ Pasted plain text into highlighter!');
+        });
+      }
+    }).catch(err => {
+        console.warn("Could not read rich clipboard, falling back to plain text:", err);
+        navigator.clipboard.readText().then(text => {
+            box.innerText = text;
+            showMessage('✅ Pasted plain text into highlighter!');
+        });
+    });
+  }
+}
+
+
+
+
+
+function applyHighlight() {
+  const box = document.getElementById('highlight-box');
+  if (!box || !box.innerHTML.trim()) {
+    showMessage('⚠️ Box is empty. Paste some content first.');
+    return;
+  }
+
+  // The vibrant teal color you want to use.
+  const highlightColor = '#9bf8ec'; 
+
+  // --- Start of Final DOM-Based Logic ---
+
+  // 1. Handle spans that are styled to be bold (the main case from Google Docs).
+  // We get all spans inside the box to check them individually.
+  const allSpans = Array.from(box.querySelectorAll('span'));
+
+  allSpans.forEach(span => {
+    // Check if the span's inline style makes it bold.
+    if (span.style.fontWeight === 'bold' || parseInt(span.style.fontWeight) >= 700) {
+      
+      // SURGICAL MODIFICATION:
+      // a) Un-bold the text by changing the inline style directly.
+      span.style.fontWeight = 'normal';
+      
+      // b) Apply the highlight color by changing the inline style directly.
+      // This will correctly override the "transparent" value from the paste.
+      span.style.backgroundColor = highlightColor;
+    }
+  });
+
+  // 2. Handle simple <b> and <strong> tags as a fallback.
+  // This ensures text bolded in simpler editors also works.
+  const boldTags = Array.from(box.querySelectorAll('b, strong'));
+  boldTags.forEach(tag => {
+    // a) Create a new span to replace the old bold tag.
+    const newSpan = document.createElement('span');
+    
+    // b) Apply the highlight color directly to the new span's inline style.
+    newSpan.style.backgroundColor = highlightColor;
+    
+    // c) Move the content from the old tag into the new span.
+    newSpan.innerHTML = tag.innerHTML;
+    
+    // d) Replace the old tag with our new, styled span.
+    tag.parentNode.replaceChild(newSpan, tag);
+  });
+
+  showMessage('✨ Bold text has been highlighted!');
+}
+
+function clearHighlighter() {
+  const box = document.getElementById('highlight-box');
+  if (box) {
+    box.innerHTML = '';
+    showMessage('🗑️ Highlighter box cleared.');
+  }
+}
+// --- ADD THIS NEW FUNCTION ---
+
+// REPLACE YOUR OLD copyFromHighlighter FUNCTION WITH THIS CORRECTED VERSION
+
+function copyFromHighlighter() {
+  const box = document.getElementById('highlight-box');
+  if (!box || !box.innerHTML.trim()) {
+    showMessage('⚠️ Box is empty, nothing to copy.');
+    return;
+  }
+
+  // --- Start of New Logic ---
+  // 1. Create a temporary, in-memory div to hold a clean copy of the HTML.
+  const tempDiv = document.createElement('div');
+  tempDiv.innerHTML = box.innerHTML;
+
+  // 2. Find all our highlighted spans within this temporary div.
+  tempDiv.querySelectorAll('.teal-highlight').forEach(span => {
+    // 3. Add the background color directly as an inline style.
+    //    This is what external applications like Google Docs understand best.
+    span.style.backgroundColor = '#cce8e0';
+    
+    // 4. IMPORTANT: Remove the class name. This prevents the destination
+    //    application from trying to guess or inherit other styles (like the font).
+    span.removeAttribute('class');
+  });
+  // --- End of New Logic ---
+
+  try {
+    // Use the cleaned HTML from our temporary div for the clipboard.
+    const htmlContent = tempDiv.innerHTML;
+    const textContent = box.innerText; // Plain text version remains the same.
+
+    const blobHtml = new Blob([htmlContent], { type: 'text/html' });
+    const blobText = new Blob([textContent], { type: 'text/plain' });
+
+    const clipboardItem = new ClipboardItem({
+      'text/html': blobHtml,
+      'text/plain': blobText
+    });
+
+    navigator.clipboard.write([clipboardItem]).then(() => {
+      showMessage('✅ Copied highlighted text to clipboard!');
+    });
+  } catch (error) {
+    console.error('Failed to copy rich text:', error);
+    showMessage('❌ Could not copy content.');
+  }
+}
+
+// --- ADD THESE FOUR NEW FUNCTIONS ---
+
+// --- Dual Highlighter Tool Functions ---
+
+function pasteIntoDualHighlighter() {
+  const box = document.getElementById('dual-highlight-box');
+  if (box) {
+    box.focus();
+    navigator.clipboard.read().then(items => {
+      for (const item of items) {
+        if (item.types.includes('text/html')) {
+          item.getType('text/html').then(blob => blob.text().then(html => {
+            box.innerHTML = html;
+            showMessage('✅ Pasted rich text!');
+          }));
+          return;
+        }
+      }
+      navigator.clipboard.readText().then(text => {
+        box.innerText = text;
+        showMessage('✅ Pasted plain text!');
+      });
+    });
+  }
+}
+
+// REPLACE THE ENTIRE applyDualHighlight FUNCTION WITH THIS CORRECTED VERSION
+
+function applyDualHighlight() {
+  const box = document.getElementById('dual-highlight-box');
+  if (!box || !box.innerHTML.trim()) {
+    showMessage('⚠️ Box is empty. Paste some content first.');
+    return;
+  }
+
+  // Define the colors we will apply directly as inline styles
+  const greenColor = '#05fd05';
+  const yellowColor = '#fbfb00';
+
+  // --- Start of Correct, Surgical DOM-Based Logic ---
+
+  // We get ALL spans in the box to check them for styles.
+  const allSpans = Array.from(box.querySelectorAll('span'));
+
+  allSpans.forEach(span => {
+    // Check for BOLD styling
+    if (span.style.fontWeight === 'bold' || parseInt(span.style.fontWeight) >= 700) {
+      // Un-bold the text
+      span.style.fontWeight = 'normal';
+      // Apply the green highlight directly
+      span.style.backgroundColor = greenColor;
+    }
+    
+    // Check for ITALIC styling
+    if (span.style.fontStyle === 'italic') {
+      // Un-italicize the text
+      span.style.fontStyle = 'normal';
+      // Apply the yellow highlight directly
+      span.style.backgroundColor = yellowColor;
+    }
+  });
+
+  // Now, handle the simple fallback tags (<b>, <i>, etc.)
+  
+  // Handle <b> and <strong>
+  const boldTags = Array.from(box.querySelectorAll('b, strong'));
+  boldTags.forEach(tag => {
+    const newSpan = document.createElement('span');
+    newSpan.style.backgroundColor = greenColor;
+    newSpan.innerHTML = tag.innerHTML;
+    tag.parentNode.replaceChild(newSpan, tag);
+  });
+  
+  // Handle <i> and <em>
+  const italicTags = Array.from(box.querySelectorAll('i, em'));
+  italicTags.forEach(tag => {
+    const newSpan = document.createElement('span');
+    newSpan.style.backgroundColor = yellowColor;
+    newSpan.innerHTML = tag.innerHTML;
+    tag.parentNode.replaceChild(newSpan, tag);
+  });
+
+  showMessage('✨ Highlights applied! (Bold: Green, Italic: Yellow)');
+}
+
+
+function clearDualHighlighter() {
+  const box = document.getElementById('dual-highlight-box');
+  if (box) {
+    box.innerHTML = '';
+    showMessage('🗑️ Dual highlighter box cleared.');
+  }
+}
+
+function copyFromDualHighlighter() {
+  const box = document.getElementById('dual-highlight-box');
+  if (!box || !box.innerHTML.trim()) {
+    showMessage('⚠️ Box is empty, nothing to copy.');
+    return;
+  }
+  
+  const tempDiv = document.createElement('div');
+  tempDiv.innerHTML = box.innerHTML;
+
+  // Add inline styles for both green and yellow highlights
+  tempDiv.querySelectorAll('.green-highlight').forEach(span => {
+    span.style.backgroundColor = '#05fd05';
+  });
+  tempDiv.querySelectorAll('.yellow-highlight').forEach(span => {
+    span.style.backgroundColor = '#fbfb00';
+  });
+  
+  // Clean up all class attributes before copying
+  tempDiv.querySelectorAll('span').forEach(span => span.removeAttribute('class'));
+
+  try {
+    const htmlContent = tempDiv.innerHTML;
+    const textContent = box.innerText;
+    const blobHtml = new Blob([htmlContent], { type: 'text/html' });
+    const blobText = new Blob([textContent], { type: 'text/plain' });
+    const clipboardItem = new ClipboardItem({ 'text/html': blobHtml, 'text/plain': blobText });
+    navigator.clipboard.write([clipboardItem]).then(() => {
+      showMessage('✅ Copied dual-highlighted text!');
+    });
+  } catch (error) {
+    console.error('Failed to copy rich text:', error);
+    showMessage('❌ Could not copy content.');
+  }
+}
+
+// --- ADD THIS NEW FUNCTION AFTER applyHighlight ---
+
+
+
+  // Build UI dynamically with grouped parts
+  const container = document.getElementById('stepsContainer');
+
+  function createPart(title, steps, className) {
+    const partDiv = document.createElement('div');
+    partDiv.className = `part-section ${className}`;
+    partDiv.innerHTML = `<h3>${title}</h3>`;
+    steps.forEach(i => partDiv.appendChild(createStep(i)));
+    return partDiv;
+  }
+
+// REPLACE YOUR ENTIRE createStep FUNCTION IN test.html WITH THIS CORRECTED VERSION
+
+// REPLACE YOUR ENTIRE createStep FUNCTION WITH THIS
+
+function createStep(i) {
+    const stepDiv = document.createElement('div');
+    stepDiv.className = 'step';
+    let copyButtonText = (i === 1 || i === 4) ? "📋 Copy Prompt (attach audio file)" : "📋 Copy Prompt";
+
+    let textarea = "";
+    if (i === 4) {
+      textarea = `
+        <div id="input4_1" class="editable" contenteditable="true" data-placeholder="Paste Punctuated English Script..."></div>
+        
+      `;
+    } else if (i === 5) {
+      textarea = `
+        <div id="input5_1" class="editable" contenteditable="true" data-placeholder="Paste English script with bold/italic here..."></div>
+        <div id="input5_2" class="editable" contenteditable="true" data-placeholder="Paste Telugu script with bold/italic for tagging..."></div>
+      `;
+    } else if (i !== 1) {
+      textarea = `<textarea id="input${i}" placeholder="Paste or type content for Step ${i}..."></textarea>`;
+    }
+
+    // Default button group WITHOUT the Paste button
+    let buttonGroup = `
+      <div class="button-group">
+        <button class="copy-btn" onclick="handleCopy(${i})">${copyButtonText}</button>
+        ${followUpButtonHTML(i)}
+        ${i !== 1 ? `<button class="clear-btn" onclick="handleClear(${i})">🗑️ Clear</button>` : ''}
+      </div>`;
+
+    if (i === 4) {
+      // Buttons for Step 9 WITHOUT the Paste button
+      buttonGroup = `
+        <div class="button-group">
+          <button class="convert-btn" onclick="wrapBoldWithGesture(${i})">🔤 Convert Bold → Gesture</button>
+          <button class="copy-btn" onclick="handleCopy(${i})">${copyButtonText}</button>
+          <button class="clear-btn" onclick="handleClear(${i})">🗑️ Clear</button>
+        </div>`;
+    }
+
+    if (i === 5) {
+      // Buttons for Step 5 WITHOUT the Paste buttons
+      buttonGroup = `
+        <div class="button-group">
+          <button class="convert-btn" onclick="transformTeluguTags()">🔤 Convert Telugu B/I → Tags</button>
+          <button class="copy-btn" onclick="handleCopy(${i})">${copyButtonText}</button> 
+          <button class="clear-btn" onclick="handleClear(${i})">🗑️ Clear</button>
+        </div>`;
+    }
+
+    stepDiv.innerHTML = `
+      <h3>
+        <span class="step-number">${i}</span>
+        <span>${stepNames[i]}</span>
+        <span class="ai-name">${aiNames[i]}</span>
+      </h3>
+      <div class="step-description"><strong>📋 Instructions:</strong> ${descriptions[i]}</div>
+      <div class="step-result"><strong>📤 Expected Output:</strong> ${results[i]}</div>
+      ${textarea}
+      ${buttonGroup}
+    `;
+    return stepDiv;
+  }
+
+  function followUpButtonHTML(i) {
+    if (i === 1) {
+      return `<button class="followup-btn" onclick="copyFollowUp(${i})">💬 Follow-up Prompt</button>`;
+    }
+    return '';
+  }
+
+// --- REPLACE THE OLD createHighlighterTool FUNCTION WITH THIS ---
+
+function createHighlighterTool() {
+  const toolDiv = document.createElement('div');
+  // Apply the new design to make it look like the other parts
+  toolDiv.className = 'part-section part5'; 
+  toolDiv.innerHTML = `
+    <h3>Bold Text Highlighter</h3>
+    <div id="highlight-box" class="editable" contenteditable="true" data-placeholder="Paste your script with bold words here (e.g., from Google Docs)..."></div>
+    <div class="button-group" style="justify-content: center; margin-top: 20px;">
+      <button class="convert-btn" style="background-color: #4a90e2; color: white; border-color: #357ABD;" onclick="applyHighlight()">🎨 Highlight Bold</button>
+      <button class="clear-btn" onclick="clearHighlighter()">🗑️ Clear</button>
+    </div>
+  `;
+  return toolDiv;
+}
+
+// --- ADD THIS NEW FUNCTION ---
+
+function createDualHighlighterTool() {
+  const toolDiv = document.createElement('div');
+  toolDiv.className = 'part-section part3'; // Using the orange theme
+  toolDiv.innerHTML = `
+    <h3>Dual Style Highlighter</h3>
+    <div id="dual-highlight-box" class="editable" contenteditable="true" data-placeholder="Paste script with bold/italic text here..."></div>
+    <div class="button-group" style="justify-content: center; margin-top: 20px;">
+      <button class="convert-btn" style="background-color: #f5a623; color: white; border-color: #c48b20;" onclick="applyDualHighlight()">🎨 Apply Highlights</button>
+      <button class="clear-btn" onclick="clearDualHighlighter()">🗑️ Clear</button>
+    </div>
+  `;
+  return toolDiv;
+}
+// --- END OF NEW FUNCTION ---
+
+// Append parts
+container.appendChild(createPart("Part 1: Transcribing", [1, 2, 3], "part1"));
+container.appendChild(createPart("Part 2: Gesture Aligned Translation", [4], "part3"));
+container.appendChild(createPart("Part 3: Fine Tuning", [5], "part4"));
+
+
+// ADD THE NEW TOOL HERE
+container.appendChild(createHighlighterTool());
+
+//container.appendChild(createPart("Part 4: Fine Tuning", [5], "part4"));
+
+// ADD THE SECOND HIGHLIGHTER TOOL AFTER STEP 10
+container.appendChild(createDualHighlighterTool());
+
+
+
+// --- Scroll to Top Button Logic ---
+// Wait for the DOM to be fully loaded before running this script
+document.addEventListener('DOMContentLoaded', function() {
+  const scrollToTopBtn = document.getElementById('scrollToTopBtn');
+
+  // We must check if the button actually exists before adding listeners to it
+  if (scrollToTopBtn) {
+    // Show the button when the user scrolls down 200px from the top
+   
+    // Show the button by adding/removing the 'visible' class
+    window.onscroll = function() {
+      if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+        scrollToTopBtn.classList.add("visible");
+      } else {
+        scrollToTopBtn.classList.remove("visible");
+      }
+    };
+
+    // When the user clicks on the button, scroll to the first part smoothly
+    scrollToTopBtn.addEventListener('click', () => {
+      const firstPart = document.querySelector('.part1');
+      if (firstPart) {
+        firstPart.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
+    });
+  }
+});
+</script>
+<!-- REPLACE WITH THIS -->
+<button id="scrollToTopBtn" title="Scroll to Top">
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <polyline points="18 15 12 9 6 15"></polyline>
+  </svg>
+</button>
+</body>
+</html>
